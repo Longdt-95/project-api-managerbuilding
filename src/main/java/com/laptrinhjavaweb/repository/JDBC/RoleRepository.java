@@ -1,5 +1,10 @@
 package com.laptrinhjavaweb.repository.JDBC;
 
-/*public interface RoleRepository<T> implements SimpleJpaRepository<T> {
-	T findByIds( long id, RowMapper<T> rowMapper);
-}*/
+import java.util.List;
+
+import com.laptrinhjavaweb.enity.RoleEntity;
+
+public interface RoleRepository extends SimpleJpaRepository<RoleEntity> {
+	RoleEntity saveRole(RoleEntity roleEntity);
+	List<RoleEntity> findAllRole();
+}

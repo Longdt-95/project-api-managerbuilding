@@ -17,7 +17,8 @@ import com.laptrinhjavaweb.annotation.Table;
 import com.laptrinhjavaweb.repository.JDBC.SimpleJpaRepository;
 
 public class SimpleJpaRepositoryIMPL<T> implements SimpleJpaRepository<T> {
-
+	
+	ObjectMapper<T> objectMapper = new ObjectMapper<T>();
 	private Class<T> getZClass() {
 		Type t = getClass().getGenericSuperclass();
 		ParameterizedType parameterizedType = (ParameterizedType) t;
@@ -28,7 +29,7 @@ public class SimpleJpaRepositoryIMPL<T> implements SimpleJpaRepository<T> {
 
 	@SuppressWarnings("static-access")
 	@Override
-	public long save(Object object) {
+	public long save(T t) {
 		String sql = buildSqlInsert();
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -39,10 +40,10 @@ public class SimpleJpaRepositoryIMPL<T> implements SimpleJpaRepository<T> {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(sql, statement.RETURN_GENERATED_KEYS);
 			int index = 1;
-			for (Field field : object.getClass().getDeclaredFields()) {
+			for (Field field : t.getClass().getDeclaredFields()) {
 				field.setAccessible(true);
 				if (!field.getName().equals("id")) {
-					statement.setObject(index, field.get(object));
+					statement.setObject(index, field.get(t));
 					index++;
 				}
 			}
@@ -105,20 +106,23 @@ public class SimpleJpaRepositoryIMPL<T> implements SimpleJpaRepository<T> {
 	}
 
 	@Override
-	public T findById(String sql, long id, RowMapper<T> rowMapper) {
-		T t = null;
+	public T findById(long id) {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
 		try {
 			connection = SingletonConnection.getInstance().getConnection();
+			Class<T> zClass = getZClass();
+			String tableName = "";
+			if (zClass.isAnnotationPresent(Table.class)) {
+				Table table = zClass.getAnnotation(Table.class);
+				tableName = table.name();
+			}
+			String sql = "select * from " + tableName + " where id = ?";
 			statement = connection.prepareStatement(sql);
 			statement.setLong(1, id);
 			resultSet = statement.executeQuery();
-			while (resultSet.next()) {
-				t = rowMapper.maprow(resultSet);
-			}
-			return t;
+			return objectMapper.maprow(resultSet, zClass).get(0);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		} finally {
@@ -141,7 +145,6 @@ public class SimpleJpaRepositoryIMPL<T> implements SimpleJpaRepository<T> {
 
 	@Override
 	public List<T> findAll() {
-		ObjectMapper<T> objectMapper = new ObjectMapper<T>();
 		Connection connection = null;
 		Statement statement = null;
 		ResultSet resultSet = null;
@@ -157,6 +160,50 @@ public class SimpleJpaRepositoryIMPL<T> implements SimpleJpaRepository<T> {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(sql);
 			return objectMapper.maprow(resultSet, zClass);
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (resultSet != null) {
+					resultSet.close();
+				}
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public T update(Object object) {
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
+		
+		try {
+			connection = SingletonConnection.getInstance().getConnection();
+			Class<T> zClass = getZClass();
+			String tableName = "";
+			if (zClass.isAnnotationPresent(Table.class)) {
+				Table table = zClass.getAnnotation(Table.class);
+				tableName = table.name();
+			}
+			String sql = "UPDATE " + tableName;
+			StringBuilder stringBuilder = new StringBuilder(sql);
+			Class<?> aClass = object.getClass();
+			for (Field field : object.getClass().getDeclaredFields()) {
+				field.setAccessible(true);
+				
+			}
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery(sql);
+			return (T) objectMapper.maprow(resultSet, zClass);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		} finally {

@@ -15,8 +15,8 @@ public class ObjectMapper<T> {
 		List<T> listResult = new ArrayList<T>();
 		try {
 			Field[] fields = zClass.getDeclaredFields();
-			T object = zClass.newInstance();
 			while (resultSet.next()) {
+				T object = zClass.newInstance();
 				ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
 				for (int i = 0; i < resultSetMetaData.getColumnCount(); i++) {
 					String columnName = resultSetMetaData.getColumnName(i + 1);

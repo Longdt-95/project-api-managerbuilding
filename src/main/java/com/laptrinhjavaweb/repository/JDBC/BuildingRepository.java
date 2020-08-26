@@ -11,5 +11,4 @@ public interface BuildingRepository extends SimpleJpaRepository<BuildingEntity>{
 	long saveWithTransaction(BuildingDTO buildingDTO);
 	BuildingEntity findById(long id);
 	
-	
 }

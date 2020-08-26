@@ -226,12 +226,5 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 		}
 	}
 
-	@SuppressWarnings("unused")
-	@Override
-	public BuildingEntity findById(long id) {
-		BuildingEntity buildingEntity = new BuildingEntity();
-		String sql = "select * from building where id = ?";
-		return buildingEntity = findById(sql, id, new BuildingMapper());
-	}
 
 }

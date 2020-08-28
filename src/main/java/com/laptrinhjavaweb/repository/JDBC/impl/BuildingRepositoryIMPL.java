@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.laptrinhjavaweb.Mapper.BuildingMapper;
+import com.laptrinhjavaweb.Mapper.ObjectMapper;
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.enity.BuildingEntity;
@@ -19,7 +19,7 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 	@Override
 	public List<BuildingEntity> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
 		List<BuildingEntity> results = new ArrayList<>();
-		BuildingMapper buildingMapper = new BuildingMapper();
+		ObjectMapper<BuildingEntity> objectMapper = new ObjectMapper<>();
 		String sql = "select * from building b join assignmentbuilding a on b.id = a.buildingid join user u on a.staffid = u.id where 1 = 1";
 		sql = buildSQLBuildingSearch(buildingSearchBuilder, sql);
 		Connection connection = null;
@@ -29,9 +29,7 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 			connection = SingletonConnection.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
 			resultSet = statement.executeQuery();
-			while (resultSet.next()) {
-				results.add(buildingMapper.maprow(resultSet));
-			}
+			results = objectMapper.maprow(resultSet, BuildingEntity.class);
 		} catch (SQLException e) {
 			return null;
 		} finally {

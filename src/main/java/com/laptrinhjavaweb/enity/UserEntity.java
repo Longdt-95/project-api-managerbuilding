@@ -1,29 +1,37 @@
-package com.laptrinhjavaweb.dto;
+package com.laptrinhjavaweb.enity;
 
 import java.util.Date;
 
-public class UserDTO {
+import com.laptrinhjavaweb.annotation.Column;
+import com.laptrinhjavaweb.annotation.Table;
+
+@Table (name = "user")
+public class UserEntity {
 	
+	@Column (name = "id")
 	private long id;
+	@Column (name = "username")
 	private String userName;
+	@Column (name = "password")
 	private String passwork;
+	@Column (name = "fullname")
 	private String fullName;
+	@Column (name = "phone")
 	private String phone;
+	@Column (name = "email")
 	private String email;
-	private String status;
-	private String checked;
+	@Column (name = "status")
+	private Integer status;
+	@Column (name = "createdby")
 	private String createdBy;
+	@Column (name = "createddate")
 	private Date createdDate;
+	@Column (name = "modifiedby")
 	private String modifiedBy;
+	@Column (name = "modifieddate")
 	private Date modifiedDate;
 	
 	
-	public String getChecked() {
-		return checked;
-	}
-	public void setChecked(String checked) {
-		this.checked = checked;
-	}
 	public long getId() {
 		return id;
 	}
@@ -60,10 +68,10 @@ public class UserDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
-	public void setStatus(String status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 	public String getCreatedBy() {
@@ -90,5 +98,6 @@ public class UserDTO {
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
-
+	
+	
 }

@@ -20,4 +20,9 @@ public class RoleRepositoryIMPL extends SimpleJpaRepositoryIMPL<RoleEntity> impl
 		return findAll();
 	}
 
+	@Override
+	public boolean updateRole(RoleEntity roleEntity) {
+		return update(roleEntity);
+	}
+
 }

@@ -5,9 +5,8 @@ import java.util.List;
 public interface SimpleJpaRepository<T> {
 	
 	long save(T t);
-	T update(Object object);
+	boolean update(Object object);
+	int delete(Object object);
 	T findById(long id);
 	List<T> findAll();
-	
-	
 }

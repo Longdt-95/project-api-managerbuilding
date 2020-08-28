@@ -35,6 +35,18 @@ public class RoleServiceIMPL implements RoleService {
 		return listRoles;
 	}
 
+	@Override
+	public boolean updateRole(RoleDTO roleDTO) {
+		RoleEntity roleEntity = roleConvertor.convertToRoleEntity(roleDTO);
+		return roleRepository.updateRole(roleEntity);
+	}
+
+	@Override
+	public int deleteRole(RoleDTO roleDTO) {
+		RoleEntity roleEntity = roleConvertor.convertToRoleEntity(roleDTO);
+		return roleRepository.delete(roleEntity);
+	}
+
 
 
 }

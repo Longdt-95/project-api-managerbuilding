@@ -2,7 +2,7 @@ package com.laptrinhjavaweb.dto;
 
 import java.util.Date;
 
-public class UserRole {
+public class User_RoleDTO {
 
 	private long id;
 	private long roleId;

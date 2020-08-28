@@ -11,7 +11,6 @@ import java.sql.Statement;
 import java.util.List;
 
 import com.laptrinhjavaweb.Mapper.ObjectMapper;
-import com.laptrinhjavaweb.Mapper.RowMapper;
 import com.laptrinhjavaweb.annotation.Column;
 import com.laptrinhjavaweb.annotation.Table;
 import com.laptrinhjavaweb.repository.JDBC.SimpleJpaRepository;
@@ -181,31 +180,36 @@ public class SimpleJpaRepositoryIMPL<T> implements SimpleJpaRepository<T> {
 	}
 
 	@Override
-	public T update(Object object) {
+	public boolean update(Object object) {
+		String sql = buildSqlUpdate();
 		Connection connection = null;
-		Statement statement = null;
-		ResultSet resultSet = null;
-		
+		PreparedStatement statement = null;
+		boolean flag = false;
 		try {
 			connection = SingletonConnection.getInstance().getConnection();
-			Class<T> zClass = getZClass();
-			String tableName = "";
-			if (zClass.isAnnotationPresent(Table.class)) {
-				Table table = zClass.getAnnotation(Table.class);
-				tableName = table.name();
-			}
-			String sql = "UPDATE " + tableName;
-			StringBuilder stringBuilder = new StringBuilder(sql);
-			Class<?> aClass = object.getClass();
-			for (Field field : object.getClass().getDeclaredFields()) {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(sql);
+			Field[] fields = object.getClass().getDeclaredFields();
+			int index = 1;
+			for (Field field : fields) {
 				field.setAccessible(true);
-				
+				if (!field.getName().equals("id")) {
+					statement.setObject(index, field.get(object));
+					index++;
+				} else 
+					statement.setObject(fields.length , field.get(object));
 			}
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery(sql);
-			return (T) objectMapper.maprow(resultSet, zClass);
-		} catch (SQLException e) {
+			flag = statement.execute();
+			connection.commit();
+			return flag;
+		} catch (SQLException | IllegalAccessException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 			System.out.println(e.getMessage());
+			return flag;
 		} finally {
 			try {
 				if (connection != null) {
@@ -214,14 +218,81 @@ public class SimpleJpaRepositoryIMPL<T> implements SimpleJpaRepository<T> {
 				if (statement != null) {
 					statement.close();
 				}
-				if (resultSet != null) {
-					resultSet.close();
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+			}
+		}
+	}
+
+	private String buildSqlUpdate() {
+		
+		Class<T> zClass = getZClass();
+		String tableName = "";
+		if (zClass.isAnnotationPresent(Table.class)) {
+			Table table = zClass.getAnnotation(Table.class);
+			tableName = table.name();
+		}
+		Field[] fields = zClass.getDeclaredFields();
+		StringBuilder columnAndValue = new StringBuilder("");
+		for (Field field : fields) {
+			if (!field.getName().equals("id") && field.isAnnotationPresent(Column.class)) {
+				Column column = field.getAnnotation(Column.class);
+				columnAndValue.append(column.name() + " = ?, ");
+			}
+		}
+		columnAndValue.deleteCharAt(columnAndValue.toString().length() - 1);
+		String sql = "UPDATE " + tableName + " SET " + columnAndValue + " WHERE id = ?";
+		return sql;
+	}
+
+	@Override
+	public int delete(Object object) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		Class<T> zClass = getZClass();
+		String tableName = "";
+		int result = -1;
+		if (zClass.isAnnotationPresent(Table.class)) {
+			Table table = zClass.getAnnotation(Table.class);
+			tableName = table.name();
+		}
+		String sql = "DELETE FROM " + tableName + " WHERE ID = ?";
+		try {
+			connection = SingletonConnection.getInstance().getConnection();
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(sql);
+			Field field;
+			try {
+				field = object.getClass().getDeclaredField("id");
+				field.setAccessible(true);
+				statement.setObject(1, field.get(object));
+			} catch (NoSuchFieldException | SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			result = statement.executeUpdate();
+			connection.commit();
+			return result;
+		} catch (SQLException | IllegalAccessException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			System.out.println(e.getMessage());
+			return result;
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (statement != null) {
+					statement.close();
 				}
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
 			}
 		}
-		return null;
 	}
 
 }

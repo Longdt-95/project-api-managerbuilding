@@ -29,4 +29,11 @@ public class RoleAPI {
 		listResult = roleservice.findAll();
 		return listResult;
 	}
+	
+	@PostMapping("/new-role")
+	public int deleteRole(@RequestBody RoleDTO roleDTO) {
+		int row = roleservice.deleteRole(roleDTO);
+		return row;
+	}
+	
 }

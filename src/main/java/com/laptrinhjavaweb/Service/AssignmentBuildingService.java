@@ -1,9 +1,9 @@
 package com.laptrinhjavaweb.Service;
 
+import java.util.List;
+
 import com.laptrinhjavaweb.dto.AssignmentBuildingDTO;
-import com.laptrinhjavaweb.enity.AssignmentBuildingEntity;
-import com.laptrinhjavaweb.repository.JDBC.SimpleJpaRepository;
 
 public interface AssignmentBuildingService {
-	long addAssignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO);
+	List<AssignmentBuildingDTO> addAssignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO);
 }

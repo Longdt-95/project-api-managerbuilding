@@ -16,26 +16,16 @@ public class UserServiceIMPL implements UserService {
 	private UserConvertor userConvertor = new UserConvertor();
 
 	@Override
-	public List<UserDTO> findAllUser(long id) {
-		List<UserDTO> listAllUser = new ArrayList<>();
-		List<UserDTO> listUserAssignmentBuilding = new ArrayList<>();
-		List<UserEntity> listUserEntity = new ArrayList<UserEntity>();
-		for (UserEntity userEntity : useRepository.getUsersAssignmentBuildingByBuildingID(id)) {
-			UserDTO dto = userConvertor.convertToUserDTO(userEntity);
-			listUserAssignmentBuilding.add(dto);
-		}
-		listUserEntity = useRepository.findAllUser();
-		for (int i = 0; i < listUserEntity.size(); i++) {
-			UserDTO dto = userConvertor.convertToUserDTO(listUserEntity.get(i));
-			for (UserDTO userDTO : listUserAssignmentBuilding) {
-				if (userDTO.getId() == dto.getId()) {
-					dto.setChecked("checked");
-					break;
-				} else
-					dto.setChecked("");
+	public List<UserDTO> findAllUser(long buildingId) {
+		List<UserDTO> result = new ArrayList<>();
+		List<UserEntity> staffs = useRepository.findAllUser();
+		for (int i = 0; i < staffs.size(); i++) {
+			UserDTO dto = userConvertor.convertToUserDTO(staffs.get(i));
+			if (useRepository.isAssignmentBuilding(dto.getId(), buildingId) ==  true) {
+				dto.setChecked("checked");
 			}
-			listAllUser.add(dto);
+			result.add(dto);
 		}
-		return listAllUser;
+		return result;
 	}
 }

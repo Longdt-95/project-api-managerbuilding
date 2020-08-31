@@ -32,7 +32,7 @@ public class RoleAPI {
 	
 	@PostMapping("/new-role")
 	public int deleteRole(@RequestBody RoleDTO roleDTO) {
-		int row = roleservice.deleteRole(roleDTO);
+		int row = roleservice.deleteRole(roleDTO.getId());
 		return row;
 	}
 	

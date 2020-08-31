@@ -6,12 +6,12 @@ public class UserDTO {
 	
 	private long id;
 	private String userName;
-	private String passwork;
+	private String passWord;
 	private String fullName;
 	private String phone;
 	private String email;
 	private String status;
-	private String checked;
+	private String checked = "";
 	private String createdBy;
 	private Date createdDate;
 	private String modifiedBy;
@@ -36,11 +36,11 @@ public class UserDTO {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public String getPasswork() {
-		return passwork;
+	public String getPassWord() {
+		return passWord;
 	}
-	public void setPasswork(String passwork) {
-		this.passwork = passwork;
+	public void setPassWork(String password) {
+		this.passWord = password;
 	}
 	public String getFullName() {
 		return fullName;

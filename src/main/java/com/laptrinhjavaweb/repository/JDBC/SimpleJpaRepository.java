@@ -6,7 +6,9 @@ public interface SimpleJpaRepository<T> {
 	
 	long save(T t);
 	boolean update(Object object);
-	int delete(Object object);
+	int delete(long id);
 	T findById(long id);
 	List<T> findAll();
+	List<T> findAll(String sql);
+	int delete(String sql);
 }

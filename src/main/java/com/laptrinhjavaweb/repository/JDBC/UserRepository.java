@@ -7,4 +7,5 @@ import com.laptrinhjavaweb.enity.UserEntity;
 public interface UserRepository extends SimpleJpaRepository<UserEntity>{
 	List<UserEntity> findAllUser();
 	List<UserEntity> getUsersAssignmentBuildingByBuildingID(long id);
+	boolean isAssignmentBuilding(long staffId, long buildingId);
 }

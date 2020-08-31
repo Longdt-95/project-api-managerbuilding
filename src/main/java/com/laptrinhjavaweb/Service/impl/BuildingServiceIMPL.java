@@ -9,9 +9,9 @@ import com.laptrinhjavaweb.Service.BuildingService;
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.enity.BuildingEntity;
-import com.laptrinhjavaweb.enums.District;
-import com.laptrinhjavaweb.enums.TypeOfBuilding;
-import com.laptrinhjavaweb.enums.TypeOfTransaction;
+import com.laptrinhjavaweb.enums.DistrictEnum;
+import com.laptrinhjavaweb.enums.TypeOfBuildingEnum;
+import com.laptrinhjavaweb.enums.TypeOfTransactionEnum;
 import com.laptrinhjavaweb.repository.JDBC.BuildingRepository;
 import com.laptrinhjavaweb.repository.JDBC.impl.BuildingRepositoryIMPL;
 
@@ -46,27 +46,27 @@ public class BuildingServiceIMPL implements BuildingService {
 	
 
 	@Override
-	public EnumMap<com.laptrinhjavaweb.enums.TypeOfBuilding, String> getTypeOfBuildings() {
-		EnumMap<com.laptrinhjavaweb.enums.TypeOfBuilding, String> map = new EnumMap<com.laptrinhjavaweb.enums.TypeOfBuilding, String>(com.laptrinhjavaweb.enums.TypeOfBuilding.class);
-		for (TypeOfBuilding typeOfBuilding : TypeOfBuilding.values()) {
+	public EnumMap<com.laptrinhjavaweb.enums.TypeOfBuildingEnum, String> getTypeOfBuildings() {
+		EnumMap<com.laptrinhjavaweb.enums.TypeOfBuildingEnum, String> map = new EnumMap<com.laptrinhjavaweb.enums.TypeOfBuildingEnum, String>(com.laptrinhjavaweb.enums.TypeOfBuildingEnum.class);
+		for (TypeOfBuildingEnum typeOfBuilding : TypeOfBuildingEnum.values()) {
 			map.put(typeOfBuilding, typeOfBuilding.getValue());
 		}
 		return map;
 	}
 
 	@Override
-	public EnumMap<District, String> getdistricts() {
-		EnumMap<com.laptrinhjavaweb.enums.District, String> map = new EnumMap<com.laptrinhjavaweb.enums.District, String>(com.laptrinhjavaweb.enums.District.class);
-		for (District district : District.values()) {
+	public EnumMap<DistrictEnum, String> getdistricts() {
+		EnumMap<com.laptrinhjavaweb.enums.DistrictEnum, String> map = new EnumMap<com.laptrinhjavaweb.enums.DistrictEnum, String>(com.laptrinhjavaweb.enums.DistrictEnum.class);
+		for (DistrictEnum district : DistrictEnum.values()) {
 			map.put(district, district.getValue());
 		}
 		return map;
 	}
 
 	@Override
-	public EnumMap<TypeOfTransaction, String> getTypeOfTransaction() {
-		EnumMap<com.laptrinhjavaweb.enums.TypeOfTransaction, String> map = new EnumMap<com.laptrinhjavaweb.enums.TypeOfTransaction, String>(com.laptrinhjavaweb.enums.TypeOfTransaction.class);
-		for (TypeOfTransaction typeOfTransaction : TypeOfTransaction.values()) {
+	public EnumMap<TypeOfTransactionEnum, String> getTypeOfTransaction() {
+		EnumMap<com.laptrinhjavaweb.enums.TypeOfTransactionEnum, String> map = new EnumMap<com.laptrinhjavaweb.enums.TypeOfTransactionEnum, String>(com.laptrinhjavaweb.enums.TypeOfTransactionEnum.class);
+		for (TypeOfTransactionEnum typeOfTransaction : TypeOfTransactionEnum.values()) {
 			map.put(typeOfTransaction, typeOfTransaction.getValue());
 		}
 		return map;

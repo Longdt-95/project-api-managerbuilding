@@ -5,10 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.laptrinhjavaweb.Mapper.ObjectMapper;
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.enity.BuildingEntity;
@@ -18,36 +16,9 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 
 	@Override
 	public List<BuildingEntity> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
-		List<BuildingEntity> results = new ArrayList<>();
-		ObjectMapper<BuildingEntity> objectMapper = new ObjectMapper<>();
 		String sql = "select * from building b join assignmentbuilding a on b.id = a.buildingid join user u on a.staffid = u.id where 1 = 1";
 		sql = buildSQLBuildingSearch(buildingSearchBuilder, sql);
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-		try {
-			connection = SingletonConnection.getInstance().getConnection();
-			statement = connection.prepareStatement(sql);
-			resultSet = statement.executeQuery();
-			results = objectMapper.maprow(resultSet, BuildingEntity.class);
-		} catch (SQLException e) {
-			return null;
-		} finally {
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-				if (statement != null) {
-					statement.close();
-				}
-				if (resultSet != null) {
-					resultSet.close();
-				}
-			} catch (SQLException e) {
-				return null;
-			}
-		}
-		return results;
+		return this.findAll(sql);
 	}
 
 	private String buildSQLBuildingSearch(BuildingSearchBuilder buildingSearchBuilder, String sql) {
@@ -79,7 +50,7 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 					}
 				}
 			}
-			String prefix = " and EXISTS (SELECT * FROM rentarea r WHERE r.buildingid = b.id AND (r.value";
+			String prefix = " and EXISTS (SELECT * FROM rentarea r WHERE r.buildingid = b.id AND (r.value ";
 			if (buildingSearchBuilder.getRentAreaFrom() != null & buildingSearchBuilder.getRentAreaTo() != null) {
 				stringBuilder.append(prefix + "between " + buildingSearchBuilder.getRentAreaFrom() + " and "
 						+ buildingSearchBuilder.getRentAreaTo() + "))");

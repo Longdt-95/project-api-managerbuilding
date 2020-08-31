@@ -42,9 +42,8 @@ public class RoleServiceIMPL implements RoleService {
 	}
 
 	@Override
-	public int deleteRole(RoleDTO roleDTO) {
-		RoleEntity roleEntity = roleConvertor.convertToRoleEntity(roleDTO);
-		return roleRepository.delete(roleEntity);
+	public int deleteRole(long id) {
+		return roleRepository.delete(id);
 	}
 
 

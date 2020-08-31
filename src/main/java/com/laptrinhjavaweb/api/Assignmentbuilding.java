@@ -1,5 +1,7 @@
 package com.laptrinhjavaweb.api;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +16,7 @@ public class Assignmentbuilding {
 	private AssignmentBuildingService assignmentBuildingService = new AssignmentBuildingServiceIMPL();
 	
 	@PostMapping ("/manager-building")
-	public long addManagerBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
+	public List<AssignmentBuildingDTO> addManagerBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
 		return assignmentBuildingService.addAssignmentBuilding(assignmentBuildingDTO);
 	}
 }

@@ -16,13 +16,13 @@ public class AssignmentBuildingServiceIMPL implements AssignmentBuildingService 
 	private AssignmentBuildingRepository assignmentBuildingRepository = new AssignmentBuildingRepositoryIMPL();
 
 	@Override
-	public List<AssignmentBuildingDTO> addAssignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO) {
+	public List<AssignmentBuildingDTO> assignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO) {
 		List<Long> newStaffIds = assignmentBuildingDTO.getStaffIdAssignmentBuilding();
 		List<Long> oldStaffIds = assignmentBuildingRepository.getStaffIds(assignmentBuildingDTO.getBuildingId());
 		List<AssignmentBuildingDTO> assignmentBuildingDTOs = new ArrayList<AssignmentBuildingDTO>();
 		for (Long newStaffId : newStaffIds) {
 			if (!oldStaffIds.contains(newStaffId)) {
-				assignmentBuildingRepository.addAssignmentBuilding(newStaffId, assignmentBuildingDTO.getBuildingId());
+				assignmentBuildingRepository.assignmentBuilding(newStaffId, assignmentBuildingDTO.getBuildingId());
 			}
 		}
 		for (Long oldStaffId : oldStaffIds) {

@@ -20,7 +20,7 @@ public class UserRepositoryIMPL extends SimpleJpaRepositoryIMPL<UserEntity> impl
 
 	@Override
 	public List<UserEntity> findAllUser() {
-		String sql = "SELECT * FROM user u JOIN user_role ur on u.id = ur.userid WHERE ur.roleid = 2 ";
+		String sql = "SELECT * FROM user u JOIN user_role ur on u.id = ur.userid JOIN role r on ur WHERE ur.roleid = 2 ";
 		return this.findAll(sql);
 	}
 

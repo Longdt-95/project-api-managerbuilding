@@ -15,8 +15,8 @@ public class Assignmentbuilding {
 	
 	private AssignmentBuildingService assignmentBuildingService = new AssignmentBuildingServiceIMPL();
 	
-	@PostMapping ("/manager-building")
+	@PostMapping ("/building/assignment")
 	public List<AssignmentBuildingDTO> addManagerBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
-		return assignmentBuildingService.addAssignmentBuilding(assignmentBuildingDTO);
+		return assignmentBuildingService.assignmentBuilding(assignmentBuildingDTO);
 	}
 }

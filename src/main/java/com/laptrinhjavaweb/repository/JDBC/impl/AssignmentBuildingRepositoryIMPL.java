@@ -21,7 +21,7 @@ public class AssignmentBuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<As
 	}
 
 	@Override
-	public long addAssignmentBuilding(Long newStaffId, long buildingId) {
+	public long assignmentBuilding(Long newStaffId, long buildingId) {
 		AssignmentBuildingEntity assignmentBuildingEntity = new AssignmentBuildingEntity();
 		assignmentBuildingEntity.setStaffId(newStaffId);
 		assignmentBuildingEntity.setBuildingId(buildingId);

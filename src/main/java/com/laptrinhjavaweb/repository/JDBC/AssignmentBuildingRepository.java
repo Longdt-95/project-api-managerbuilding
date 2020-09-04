@@ -9,7 +9,7 @@ public interface AssignmentBuildingRepository extends SimpleJpaRepository<Assign
 	
 	List<Long> getStaffIds(long buildingId);
 
-	long addAssignmentBuilding(Long newStaffId, long buildingId);
+	long assignmentBuilding(Long newStaffId, long buildingId);
 
 	int deleteAssignmentBuilding(Long oldStaffId, long buildingId);
 	

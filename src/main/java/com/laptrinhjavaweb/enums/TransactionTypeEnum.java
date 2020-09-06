@@ -1,11 +1,13 @@
 package com.laptrinhjavaweb.enums;
 
-public enum TypeOfTransactionEnum {
+public enum TransactionTypeEnum {
 	TYPE_1 ("Qúa trình chăm sóc khách hàng"),
 	TYPE_2 ("Dẫn đi xem");
 	
 	private String typeValue;
-	TypeOfTransactionEnum(String typeValue) {
+	
+	
+	TransactionTypeEnum(String typeValue) {
 		this.typeValue = typeValue;
 	}
 	public String getValue() {

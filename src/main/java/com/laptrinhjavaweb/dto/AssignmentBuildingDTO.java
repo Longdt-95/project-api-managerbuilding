@@ -1,37 +1,22 @@
 package com.laptrinhjavaweb.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class AssignmentBuildingDTO {
-	private long id;
-	private long staffId;
-	private long buildingId;
-	private List<Long> staffIdAssignmentBuilding = new ArrayList<>();
+	private Long buildingId;
+	private Long[] staffId;
 	
-	public List<Long> getStaffIdAssignmentBuilding() {
-		return staffIdAssignmentBuilding;
-	}
-	public void setStaffIdAssignmentBuilding(List<Long> staffIdAssignmentBuilding) {
-		this.staffIdAssignmentBuilding = staffIdAssignmentBuilding;
-	}
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
-	public long getStaffId() {
-		return staffId;
-	}
-	public void setStaffId(long staffId) {
-		this.staffId = staffId;
-	}
-	public long getBuildingId() {
+	
+	public Long getBuildingId() {
 		return buildingId;
 	}
-	public void setBuildingId(long buildingId) {
+	public void setBuildingId(Long buildingId) {
 		this.buildingId = buildingId;
 	}
+	public Long[] getStaffId() {
+		return staffId;
+	}
+	public void setStaffId(Long[] staffId) {
+		this.staffId = staffId;
+	}
 	
+		
 }

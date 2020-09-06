@@ -5,5 +5,5 @@ import java.util.List;
 import com.laptrinhjavaweb.dto.AssignmentBuildingDTO;
 
 public interface AssignmentBuildingService {
-	List<AssignmentBuildingDTO> assignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO);
+	boolean assignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO);
 }

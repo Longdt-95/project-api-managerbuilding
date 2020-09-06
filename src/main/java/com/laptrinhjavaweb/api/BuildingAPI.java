@@ -11,16 +11,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.laptrinhjavaweb.Service.AssignmentBuildingService;
 import com.laptrinhjavaweb.Service.BuildingService;
+import com.laptrinhjavaweb.Service.UserService;
+import com.laptrinhjavaweb.Service.impl.AssignmentBuildingServiceIMPL;
 import com.laptrinhjavaweb.Service.impl.BuildingServiceIMPL;
+import com.laptrinhjavaweb.Service.impl.UserServiceIMPL;
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
+import com.laptrinhjavaweb.dto.AssignmentBuildingDTO;
 import com.laptrinhjavaweb.dto.BuildingDTO;
+import com.laptrinhjavaweb.dto.UserDTO;
 
 @RestController
 public class BuildingAPI {
 
 	private BuildingService buildingService = new BuildingServiceIMPL();
-	
+	private AssignmentBuildingService assignmentBuildingService = new AssignmentBuildingServiceIMPL();
 	
 
 	@GetMapping("/buildings")
@@ -34,6 +40,18 @@ public class BuildingAPI {
 		return buildingService.saveBuilding(buildingDTO);
 	}
 	
+private UserService userService = new UserServiceIMPL();
+	
+	@GetMapping ("/building/staff")
+	public List<UserDTO> getUsers(@RequestParam long  id, @RequestParam String role) {
+		List<UserDTO> listResult = userService.findAllUser(id, role);
+		return listResult;
+	}
+	
+	@PostMapping ("/building/assignment")
+	public boolean addManagerBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
+		return assignmentBuildingService.assignmentBuilding(assignmentBuildingDTO);
+	}
 	
 	private BuildingSearchBuilder convertMapToBuilder(Map<String, String> requestParams, String[] type) {
 

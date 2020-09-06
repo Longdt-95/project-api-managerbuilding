@@ -16,9 +16,9 @@ public class UserServiceIMPL implements UserService {
 	private UserConvertor userConvertor = new UserConvertor();
 
 	@Override
-	public List<UserDTO> findAllUser(long buildingId) {
+	public List<UserDTO> findAllUser(long buildingId, String role) {
 		List<UserDTO> result = new ArrayList<>();
-		List<UserEntity> staffs = useRepository.findAllUser();
+		List<UserEntity> staffs = useRepository.findAllUser(role);
 		for (int i = 0; i < staffs.size(); i++) {
 			UserDTO dto = userConvertor.convertToUserDTO(staffs.get(i));
 			if (useRepository.isAssignmentBuilding(dto.getId(), buildingId) ==  true) {

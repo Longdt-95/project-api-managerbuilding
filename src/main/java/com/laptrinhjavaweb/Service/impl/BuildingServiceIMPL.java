@@ -10,8 +10,8 @@ import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.enity.BuildingEntity;
 import com.laptrinhjavaweb.enums.DistrictEnum;
-import com.laptrinhjavaweb.enums.TypeOfBuildingEnum;
-import com.laptrinhjavaweb.enums.TypeOfTransactionEnum;
+import com.laptrinhjavaweb.enums.BuildingTypeEnum;
+import com.laptrinhjavaweb.enums.TransactionTypeEnum;
 import com.laptrinhjavaweb.repository.JDBC.BuildingRepository;
 import com.laptrinhjavaweb.repository.JDBC.impl.BuildingRepositoryIMPL;
 
@@ -46,9 +46,9 @@ public class BuildingServiceIMPL implements BuildingService {
 	
 
 	@Override
-	public EnumMap<com.laptrinhjavaweb.enums.TypeOfBuildingEnum, String> getTypeOfBuildings() {
-		EnumMap<com.laptrinhjavaweb.enums.TypeOfBuildingEnum, String> map = new EnumMap<com.laptrinhjavaweb.enums.TypeOfBuildingEnum, String>(com.laptrinhjavaweb.enums.TypeOfBuildingEnum.class);
-		for (TypeOfBuildingEnum typeOfBuilding : TypeOfBuildingEnum.values()) {
+	public EnumMap<com.laptrinhjavaweb.enums.BuildingTypeEnum, String> getTypeOfBuildings() {
+		EnumMap<com.laptrinhjavaweb.enums.BuildingTypeEnum, String> map = new EnumMap<com.laptrinhjavaweb.enums.BuildingTypeEnum, String>(com.laptrinhjavaweb.enums.BuildingTypeEnum.class);
+		for (BuildingTypeEnum typeOfBuilding : BuildingTypeEnum.values()) {
 			map.put(typeOfBuilding, typeOfBuilding.getValue());
 		}
 		return map;
@@ -64,9 +64,9 @@ public class BuildingServiceIMPL implements BuildingService {
 	}
 
 	@Override
-	public EnumMap<TypeOfTransactionEnum, String> getTypeOfTransaction() {
-		EnumMap<com.laptrinhjavaweb.enums.TypeOfTransactionEnum, String> map = new EnumMap<com.laptrinhjavaweb.enums.TypeOfTransactionEnum, String>(com.laptrinhjavaweb.enums.TypeOfTransactionEnum.class);
-		for (TypeOfTransactionEnum typeOfTransaction : TypeOfTransactionEnum.values()) {
+	public EnumMap<TransactionTypeEnum, String> getTypeOfTransaction() {
+		EnumMap<com.laptrinhjavaweb.enums.TransactionTypeEnum, String> map = new EnumMap<com.laptrinhjavaweb.enums.TransactionTypeEnum, String>(com.laptrinhjavaweb.enums.TransactionTypeEnum.class);
+		for (TransactionTypeEnum typeOfTransaction : TransactionTypeEnum.values()) {
 			map.put(typeOfTransaction, typeOfTransaction.getValue());
 		}
 		return map;

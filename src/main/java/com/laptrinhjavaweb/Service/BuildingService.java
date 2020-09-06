@@ -6,8 +6,8 @@ import java.util.List;
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.enums.DistrictEnum;
-import com.laptrinhjavaweb.enums.TypeOfBuildingEnum;
-import com.laptrinhjavaweb.enums.TypeOfTransactionEnum;
+import com.laptrinhjavaweb.enums.BuildingTypeEnum;
+import com.laptrinhjavaweb.enums.TransactionTypeEnum;
 
 public interface BuildingService {
 	List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder);
@@ -21,8 +21,8 @@ public interface BuildingService {
 		List<String> getDistricts();*/
 		
 	// get type of building user enum
-	EnumMap<TypeOfBuildingEnum, String> getTypeOfBuildings();
+	EnumMap<BuildingTypeEnum, String> getTypeOfBuildings();
 		
 	EnumMap<DistrictEnum, String> getdistricts();
-	EnumMap<TypeOfTransactionEnum, String> getTypeOfTransaction();
+	EnumMap<TransactionTypeEnum, String> getTypeOfTransaction();
 }

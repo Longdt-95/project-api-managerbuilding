@@ -264,6 +264,53 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 		}
 	}
 
+	@SuppressWarnings("resource")
+	@Override
+	public boolean deleteWithTransaction(long id) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		boolean flag = false;
+		try {
+			connection = SingletonConnection.getInstance().getConnection();
+			connection.setAutoCommit(false);
+			String sqlDelFromAssign = "DELETE FROM assignmentbuilding WHERE buildingid = ?";
+			statement = connection.prepareStatement(sqlDelFromAssign);
+			statement.setLong(1, id);
+			statement.execute();
+			String sqlDelFromRentarea = "DELETE FROM rentarea WHERE buildingid = ?";
+			statement = connection.prepareStatement(sqlDelFromRentarea);
+			statement.setLong(1, id);
+			statement.execute();
+			String sqlDelBuilding = "DELETE FROM building WHERE id = ?";
+			statement = connection.prepareStatement(sqlDelBuilding);
+			statement.setLong(1, id);
+			statement.execute();
+			connection.commit();
+			flag = true;
+			return flag;
+		} catch (SQLException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			System.out.println(e.getMessage());
+			return flag;
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+				return flag;
+			}
+		}
+	}
+
 
 	
 

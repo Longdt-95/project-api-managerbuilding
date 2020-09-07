@@ -11,5 +11,6 @@ public interface BuildingRepository extends SimpleJpaRepository<BuildingEntity>{
 	long saveWithTransaction(BuildingDTO buildingDTO);
 	BuildingEntity findById(long id);
 	boolean updateWithTransaction(BuildingEntity buildingEntity, List<Integer> valuesDelete, List<Integer> valuesInsert);
+	boolean deleteWithTransaction(long id);
 	
 }

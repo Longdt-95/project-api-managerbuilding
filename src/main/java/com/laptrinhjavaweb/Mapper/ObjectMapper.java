@@ -6,8 +6,6 @@ import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 import com.laptrinhjavaweb.annotation.Column;
 
 public class ObjectMapper<T> {
@@ -21,7 +19,7 @@ public class ObjectMapper<T> {
 				for (int i = 0; i < resultSetMetaData.getColumnCount(); i++) {
 					String columnName = resultSetMetaData.getColumnName(i + 1);
 					Object columnValue = resultSet.getObject(columnName);
-					for (Field field: fields) {
+					for (Field field : fields) {
 						field.setAccessible(true);
 						Column column = field.getAnnotation(Column.class);
 						if (column.name().equals(columnName) && columnValue != null) {

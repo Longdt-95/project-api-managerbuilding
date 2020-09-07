@@ -27,32 +27,37 @@ public class BuildingAPI {
 
 	private BuildingService buildingService = new BuildingServiceIMPL();
 	private AssignmentBuildingService assignmentBuildingService = new AssignmentBuildingServiceIMPL();
-	
 
 	@GetMapping("/buildings")
-	public List<BuildingDTO> getBuildings(@RequestParam Map<String, String> requestParams, @RequestParam String[] type) {
+	public List<BuildingDTO> getBuildings(@RequestParam Map<String, String> requestParams,
+			@RequestParam String[] type) {
 		BuildingSearchBuilder buildingSearchBuilder = convertMapToBuilder(requestParams, type);
 		return buildingService.getBuildings(buildingSearchBuilder);
 	}
 
-	@PostMapping ("/buildings")
+	@PostMapping("/buildings")
 	public BuildingDTO saveBuilding(@RequestBody BuildingDTO buildingDTO) {
 		return buildingService.saveBuilding(buildingDTO);
 	}
-	
-private UserService userService = new UserServiceIMPL();
-	
-	@GetMapping ("/building/staff")
-	public List<UserDTO> getUsers(@RequestParam long  id, @RequestParam String role) {
-		List<UserDTO> listResult = userService.findAllUser(id, role);
+
+	private UserService userService = new UserServiceIMPL();
+
+	@GetMapping("/building/staff")
+	public List<UserDTO> getUsers(@RequestParam long buildingid, @RequestParam String role) {
+		List<UserDTO> listResult = userService.findAllUser(buildingid, role);
 		return listResult;
 	}
-	
-	@PostMapping ("/building/assignment")
+
+	@PostMapping("/building/assignment")
 	public boolean addManagerBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
 		return assignmentBuildingService.assignmentBuilding(assignmentBuildingDTO);
 	}
 	
+	@PostMapping ("/building/edit")
+	public boolean updateBuilding(@RequestBody BuildingDTO buildingDTO) {
+		return buildingService.updateBuilding(buildingDTO);
+	}
+
 	private BuildingSearchBuilder convertMapToBuilder(Map<String, String> requestParams, String[] type) {
 
 		Integer numberOfBasement = requestParams.containsKey("numberOfBasement")
@@ -96,17 +101,16 @@ private UserService userService = new UserServiceIMPL();
 				.setWard(requestParams.containsKey("ward") ? requestParams.get("ward") : null)
 				.setRentAreaFrom(rentAreaFrom).setRentAreaTo(rentAreaTo).setRentPriceFrom(rentPriceFrom)
 				.setRentPriceTo(rentPriceTo)
-				.setStaffNameAssimentBuilding(requestParams.containsKey("staffNameAssimentBuilding")
-						? requestParams.get("staffNameAssimentBuilding")
+				.setManagerName(requestParams.containsKey("managerName")
+						? requestParams.get("managerName")
 						: null)
-				.setChooseStaffNameAssimentBuilding(requestParams.containsKey("chooseStaffNameAssimentBuilding")
-						? requestParams.get("chooseStaffNameAssimentBuilding")
+				.setManagerPhone(requestParams.containsKey("managerPhone")
+						? requestParams.get("managerPhone")
 						: null)
-				.setStaffPhoneAssimentBuilding(requestParams.containsKey("staffPhoneAssimentBuilding")
-						? requestParams.get("staffPhoneAssimentBuilding")
+				.setStaffId(requestParams.containsKey("staffId")
+						? requestParams.get("staffId")
 						: null)
-				.setTypes(type)
-				.build();
+				.setTypes(type).build();
 		return builder;
 	}
 }

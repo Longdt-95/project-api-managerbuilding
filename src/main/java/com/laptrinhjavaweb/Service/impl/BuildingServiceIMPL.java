@@ -1,7 +1,6 @@
 package com.laptrinhjavaweb.Service.impl;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 
 import com.laptrinhjavaweb.Convertor.BuildingConvertor;
@@ -9,17 +8,17 @@ import com.laptrinhjavaweb.Service.BuildingService;
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.enity.BuildingEntity;
-import com.laptrinhjavaweb.enums.DistrictEnum;
-import com.laptrinhjavaweb.enums.BuildingTypeEnum;
-import com.laptrinhjavaweb.enums.TransactionTypeEnum;
+import com.laptrinhjavaweb.enity.RentAreaEntity;
 import com.laptrinhjavaweb.repository.JDBC.BuildingRepository;
+import com.laptrinhjavaweb.repository.JDBC.RentAreaRepository;
 import com.laptrinhjavaweb.repository.JDBC.impl.BuildingRepositoryIMPL;
+import com.laptrinhjavaweb.repository.JDBC.impl.RentAreaRepositoryIMPL;
 
 public class BuildingServiceIMPL implements BuildingService {
-	
+
 	private BuildingRepository buildingRepository = new BuildingRepositoryIMPL();
 	private BuildingConvertor buildingConvetor = new BuildingConvertor();
-	
+	private RentAreaRepository rentAreaEepository = new RentAreaRepositoryIMPL();
 
 	@Override
 	public List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
@@ -42,38 +41,43 @@ public class BuildingServiceIMPL implements BuildingService {
 		return buildingDTOResult;
 	}
 
-	
-	
-
 	@Override
-	public EnumMap<com.laptrinhjavaweb.enums.BuildingTypeEnum, String> getTypeOfBuildings() {
-		EnumMap<com.laptrinhjavaweb.enums.BuildingTypeEnum, String> map = new EnumMap<com.laptrinhjavaweb.enums.BuildingTypeEnum, String>(com.laptrinhjavaweb.enums.BuildingTypeEnum.class);
-		for (BuildingTypeEnum typeOfBuilding : BuildingTypeEnum.values()) {
-			map.put(typeOfBuilding, typeOfBuilding.getValue());
+	public boolean updateBuilding(BuildingDTO buildingDTO) {
+		BuildingEntity buildingEntity = buildingConvetor.convertToBuildingEntity(buildingDTO);
+		StringBuilder type = new StringBuilder();
+		for (String string : buildingDTO.getTypes()) {
+			type.append(string + ",");
 		}
-		return map;
-	}
-
-	@Override
-	public EnumMap<DistrictEnum, String> getdistricts() {
-		EnumMap<com.laptrinhjavaweb.enums.DistrictEnum, String> map = new EnumMap<com.laptrinhjavaweb.enums.DistrictEnum, String>(com.laptrinhjavaweb.enums.DistrictEnum.class);
-		for (DistrictEnum district : DistrictEnum.values()) {
-			map.put(district, district.getValue());
+		type.deleteCharAt(type.length() - 1);
+		buildingEntity.setType(type.toString());
+		boolean flag = false;
+		if (buildingDTO.getRentAreas() != null) {
+			List<RentAreaEntity> result = rentAreaEepository.getRentArea(buildingDTO.getId());
+			List<Integer> oldValues = new ArrayList<Integer>();
+			List<Integer> newValues = new ArrayList<Integer>();
+			List<Integer> valuesDelete = new ArrayList<>();
+			List<Integer> valuesInsert = new ArrayList<>();
+			for (RentAreaEntity rentAreaEntity : result) {
+				oldValues.add(rentAreaEntity.getValue());
+			}
+			for (String string : buildingDTO.getRentAreas()) {
+				newValues.add(Integer.parseInt(string));
+			}
+			for (Integer newValue : newValues) {
+				if (!oldValues.contains(newValue)) {
+					valuesInsert.add(newValue);
+				}
+			}
+			for (Integer oldValue : oldValues) {
+				if (!newValues.contains(oldValue)) {
+					valuesDelete.add(oldValue);
+				}
+			}
+			flag = buildingRepository.updateWithTransaction(buildingEntity, valuesDelete, valuesInsert);
+		}else {
+			flag = buildingRepository.update(buildingEntity);
 		}
-		return map;
+		return flag;
 	}
-
-	@Override
-	public EnumMap<TransactionTypeEnum, String> getTypeOfTransaction() {
-		EnumMap<com.laptrinhjavaweb.enums.TransactionTypeEnum, String> map = new EnumMap<com.laptrinhjavaweb.enums.TransactionTypeEnum, String>(com.laptrinhjavaweb.enums.TransactionTypeEnum.class);
-		for (TransactionTypeEnum typeOfTransaction : TransactionTypeEnum.values()) {
-			map.put(typeOfTransaction, typeOfTransaction.getValue());
-		}
-		return map;
-	}
-
-	
-	
-	
 
 }

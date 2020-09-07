@@ -16,67 +16,71 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 
 	@Override
 	public List<BuildingEntity> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
-		String sql = "select * from building b join assignmentbuilding a on b.id = a.buildingid join user u on a.staffid = u.id where 1 = 1";
-		sql = buildSQLBuildingSearch(buildingSearchBuilder, sql);
-		return this.findAll(sql);
+		StringBuilder sql = new StringBuilder("SELECT * FROM building b");
+		if (buildingSearchBuilder.getstaffId() != null) {
+			sql.append(" JOIN assignmentbuilding a on b.id = a.buildingid");
+		}
+		sql.append(" WHERE 1 = 1");
+		sql = buildSQLBuildingSearchCommon(buildingSearchBuilder, sql);
+		sql = buildSQLBuiSearchSpecial(buildingSearchBuilder, sql);
+		if (buildingSearchBuilder.getstaffId() != null) {
+			sql.append(" AND a.staffid = " + buildingSearchBuilder.getstaffId());
+		}
+		return this.findAll(sql.toString());
 	}
 
-	private String buildSQLBuildingSearch(BuildingSearchBuilder buildingSearchBuilder, String sql) {
-		StringBuilder stringBuilder = new StringBuilder(sql);
+	private StringBuilder buildSQLBuiSearchSpecial(BuildingSearchBuilder buildingSearchBuilder, StringBuilder sql) {
+		if (buildingSearchBuilder.getRentPriceFrom() != null) {
+			sql.append(" AND b.rentprice >= " + buildingSearchBuilder.getRentPriceFrom());
+		} 
+		if (buildingSearchBuilder.getRentPriceTo() != null) {
+			sql.append(" AND b.rentprice <= " + buildingSearchBuilder.getRentPriceTo());
+		}
+		if (buildingSearchBuilder.getRentAreaFrom() != null || buildingSearchBuilder.getRentAreaTo() != null) {
+			sql.append(" AND EXISTS (SELECT * FROM rentarea r WHERE r.buildingid = b.id");
+			if (buildingSearchBuilder.getRentAreaFrom() != null) {
+				sql.append(" AND r.value >= " + buildingSearchBuilder.getRentAreaFrom());
+			}
+			if (buildingSearchBuilder.getRentAreaTo() != null) {
+				sql.append(" AND r.value <= " + buildingSearchBuilder.getRentAreaTo());
+			}
+			sql.append(" )");
+		}
+		if (buildingSearchBuilder.getTypes() != null) {
+			int lengthType = buildingSearchBuilder.getTypes().length;
+			sql.append(" and (b.type like '%" + buildingSearchBuilder.getTypes()[0] + "%'");
+			for (int i = 1; i < lengthType; i++) {
+				if (i >= 1) {
+					sql.append(" or b.type like '%" + buildingSearchBuilder.getTypes()[i] + "%'");
+				}
+			}
+			sql.append(")");
+		}
+
+		return sql;
+	}
+
+	private StringBuilder buildSQLBuildingSearchCommon(BuildingSearchBuilder buildingSearchBuilder, StringBuilder sql) {
 		Field[] fields = BuildingSearchBuilder.class.getDeclaredFields();
 		try {
 			for (Field field : fields) {
 				field.setAccessible(true);
-				if (!field.getName().equals("chooseStaffNameAssimentBuilding")
-						&& !field.getName().startsWith("rentPrice") && !field.getName().startsWith("rentArea")
-						&& !field.getName().equals("types") && !field.getName().equals("staffNameAssimentBuilding")
-						&& !field.getName().equals("staffPhoneAssimentBuilding")) {
+				if (!field.getName().startsWith("rentPrice") && !field.getName().startsWith("rentArea")
+						&& !field.getName().equals("types") && !field.getName().equals("staffId")) {
 					if (field.getType().getName().equals("java.lang.String")) {
 						if (field.get(buildingSearchBuilder) != null) {
-							stringBuilder.append(" and b." + field.getName().toLowerCase() + " like '%"
+							sql.append(" and b." + field.getName().toLowerCase() + " like '%"
 									+ field.get(buildingSearchBuilder) + "%'");
 						}
 					} else if (field.getType().getName().equals("java.lang.Integer")) {
 						if (field.get(buildingSearchBuilder) != null) {
-							stringBuilder.append(" and b." + field.getName().toLowerCase() + " = "
+							sql.append(" and b." + field.getName().toLowerCase() + " = "
 									+ field.get(buildingSearchBuilder));
 						}
 					}
-				} else {
-					if (field.getName().equals("rentPriceFrom") && field.get(buildingSearchBuilder) != null) {
-						stringBuilder.append(" and " + field.get(buildingSearchBuilder) + " <= b.rentprice");
-					} else if (field.getName().equals("rentPriceTo") && field.get(buildingSearchBuilder) != null) {
-						stringBuilder.append(" and " + field.get(buildingSearchBuilder) + " >= b.rentprice");
-					}
 				}
 			}
-			String prefix = " and EXISTS (SELECT * FROM rentarea r WHERE r.buildingid = b.id AND (r.value ";
-			if (buildingSearchBuilder.getRentAreaFrom() != null & buildingSearchBuilder.getRentAreaTo() != null) {
-				stringBuilder.append(prefix + "between " + buildingSearchBuilder.getRentAreaFrom() + " and "
-						+ buildingSearchBuilder.getRentAreaTo() + "))");
-			} else if (buildingSearchBuilder.getRentPriceFrom() != null) {
-				stringBuilder.append(prefix + " >= " + buildingSearchBuilder.getRentPriceFrom() + "))");
-			} else
-				stringBuilder.append(prefix + " <= " + buildingSearchBuilder.getRentPriceTo() + "))");
-
-			if (buildingSearchBuilder.getStaffNameAssimentBuilding() != null) {
-				stringBuilder
-						.append(" and u.fullname = '" + buildingSearchBuilder.getStaffNameAssimentBuilding() + "'");
-			}
-			if (buildingSearchBuilder.getStaffPhoneAssimentBuilding() != null) {
-				stringBuilder.append(" and u.phone = '" + buildingSearchBuilder.getStaffPhoneAssimentBuilding() + "'");
-			}
-			if (buildingSearchBuilder.getTypes() != null) {
-				int lengthType = buildingSearchBuilder.getTypes().length;
-				stringBuilder.append(" and (b.type like '%" + buildingSearchBuilder.getTypes()[0] + "%'");
-				for (int i = 1; i < lengthType; i++) {
-					if (i >= 1) {
-						stringBuilder.append(" or b.type like '%" + buildingSearchBuilder.getTypes()[i] + "%'");
-					}
-				}
-				stringBuilder.append(")");
-			}
-			return stringBuilder.toString();
+			return sql;
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			System.out.println(e.getMessage());
 			return null;
@@ -179,12 +183,12 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 				int index = 1;
 				for (Field field : buildingDTO.getClass().getDeclaredFields()) {
 					field.setAccessible(true);
-					if (!field.getName().equals("id") && !field.getName().equals("rentArea") 
-													&& !field.getName().equals("rentAreas") && !field.getName().equals("type")) {
+					if (!field.getName().equals("id") && !field.getName().equals("rentArea")
+							&& !field.getName().equals("rentAreas") && !field.getName().equals("type")) {
 						statement.setObject(index, field.get(buildingDTO));
 						index++;
-					}else if(field.getName().equals("type")) {
-						String type = convertTypeToString(buildingDTO.getType());
+					} else if (field.getName().equals("type")) {
+						String type = convertTypeToString(buildingDTO.getTypes());
 						statement.setObject(index, type);
 						index++;
 					}
@@ -195,5 +199,72 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 		}
 	}
 
+	@SuppressWarnings("resource")
+	@Override
+	public boolean updateWithTransaction(BuildingEntity buildingEntity, List<Integer> valuesDelete, List<Integer> valuesInsert) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		boolean flag = false;
+		try {
+			connection = SingletonConnection.getInstance().getConnection();
+			connection.setAutoCommit(false);
+			String sqlUpdateBuilding = this.buildSqlUpdate();
+			statement = connection.prepareStatement(sqlUpdateBuilding);
+			Field[] fields = buildingEntity.getClass().getDeclaredFields();
+			int index = 1;
+			Object t = null;
+			for (Field field : fields) {
+				field.setAccessible(true);
+				if (!field.getName().equals("id")) {
+					statement.setObject(index, field.get(buildingEntity));
+					index++;
+				} else
+					t = field.get(buildingEntity);
+			}
+			statement.setObject(index, t);
+			statement.execute();
+			// save RentArea
+			String sqlDeleteRentArea = "DELETE FROM rentarea WHERE value = ? AND buildingid = ?";
+			statement = connection.prepareStatement(sqlDeleteRentArea);
+			for (Integer value : valuesDelete) {
+				statement.setInt(1, value);
+				statement.setLong(2, buildingEntity.getId());
+				statement.execute();
+			}
+			String sqlInsertRentArea = "INSERT INTO rentarea(value,buildingid) VALUES(?,?)";
+			statement = connection.prepareStatement(sqlInsertRentArea);
+			for (Integer value : valuesInsert) {
+				statement.setInt(1, value);
+				statement.setLong(2, buildingEntity.getId());
+				statement.execute();
+			}
+			connection.commit();
+			flag = true;
+			return flag;
+		} catch (SQLException | IllegalAccessException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			System.out.println(e.getMessage());
+			return flag;
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+				return flag;
+			}
+		}
+	}
+
+
+	
 
 }

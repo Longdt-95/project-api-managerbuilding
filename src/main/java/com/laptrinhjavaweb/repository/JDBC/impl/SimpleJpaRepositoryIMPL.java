@@ -193,14 +193,16 @@ public class SimpleJpaRepositoryIMPL<T> implements SimpleJpaRepository<T> {
 			statement = connection.prepareStatement(sql);
 			Field[] fields = object.getClass().getDeclaredFields();
 			int index = 1;
+			Object t = null;
 			for (Field field : fields) {
 				field.setAccessible(true);
 				if (!field.getName().equals("id")) {
 					statement.setObject(index, field.get(object));
 					index++;
 				} else
-					statement.setObject(fields.length, field.get(object));
+					t = field.get(object);
 			}
+			statement.setObject(index, t);
 			flag = statement.execute();
 			connection.commit();
 			return flag;
@@ -226,8 +228,7 @@ public class SimpleJpaRepositoryIMPL<T> implements SimpleJpaRepository<T> {
 		}
 	}
 
-	private String buildSqlUpdate() {
-
+	protected String buildSqlUpdate() {
 		Class<T> zClass = getZClass();
 		String tableName = "";
 		if (zClass.isAnnotationPresent(Table.class)) {
@@ -236,13 +237,16 @@ public class SimpleJpaRepositoryIMPL<T> implements SimpleJpaRepository<T> {
 		}
 		Field[] fields = zClass.getDeclaredFields();
 		StringBuilder columnAndValue = new StringBuilder("");
-		for (Field field : fields) {
-			if (!field.getName().equals("id") && field.isAnnotationPresent(Column.class)) {
-				Column column = field.getAnnotation(Column.class);
-				columnAndValue.append(column.name() + " = ?, ");
+		for (int i = 0; i < fields.length; i++ ) {
+			if (!fields[i].getName().equals("id") && fields[i].isAnnotationPresent(Column.class)) {
+				if (i > 1) {
+					columnAndValue.append(",");
+				}
+				Column column = fields[i].getAnnotation(Column.class);
+				columnAndValue.append(column.name() + " = ? ");
 			}
 		}
-		columnAndValue.deleteCharAt(columnAndValue.toString().length() - 1);
+		columnAndValue.deleteCharAt(columnAndValue.length() - 1);
 		String sql = "UPDATE " + tableName + " SET " + columnAndValue + " WHERE id = ?";
 		return sql;
 	}

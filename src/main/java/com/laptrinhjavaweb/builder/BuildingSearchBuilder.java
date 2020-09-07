@@ -14,9 +14,9 @@ public class BuildingSearchBuilder {
 	private Integer rentAreaTo;
 	private Integer rentPriceFrom;
 	private Integer rentPriceTo;
-	private String staffNameAssimentBuilding;
-	private String staffPhoneAssimentBuilding;
-	private String chooseStaffNameAssimentBuilding;
+	private String managerName;
+	private String managerPhone;
+	private String staffId;
 	private String[] types = new String[] {};
 
 	public Integer getRentAreaFrom() {
@@ -35,18 +35,20 @@ public class BuildingSearchBuilder {
 		return rentPriceTo;
 	}
 
-	public String getStaffNameAssimentBuilding() {
-		return staffNameAssimentBuilding;
+	
+
+
+	public String getManagerName() {
+		return managerName;
 	}
 
-	public String getStaffPhoneAssimentBuilding() {
-		return staffPhoneAssimentBuilding;
+	public String getManagerPhone() {
+		return managerPhone;
 	}
 
-	public String getChooseStaffNameAssimentBuilding() {
-		return chooseStaffNameAssimentBuilding;
+	public String getstaffId() {
+		return staffId;
 	}
-
 
 	public String getName() {
 		return name;
@@ -89,13 +91,13 @@ public class BuildingSearchBuilder {
 			this.ward=builder.ward;
 			this.floorArea=builder.floorArea;
 			this.level=builder.level;
-			this.chooseStaffNameAssimentBuilding=builder.chooseStaffNameAssimentBuilding;
+			this.staffId=builder.staffId;
 			this.rentAreaFrom=builder.rentAreaFrom;
 			this.rentAreaTo=builder.rentAreaTo;
 			this.rentPriceFrom=builder.rentPriceFrom;
 			this.rentPriceTo=builder.rentPriceTo;
-			this.staffNameAssimentBuilding=builder.staffNameAssimentBuilding;
-			this.staffPhoneAssimentBuilding=builder.staffPhoneAssimentBuilding;
+			this.managerName=builder.managerName;
+			this.managerPhone=builder.managerPhone;
 			this.types=builder.types;
 		}
 
@@ -118,9 +120,9 @@ public class BuildingSearchBuilder {
 		private Integer rentAreaTo;
 		private Integer rentPriceFrom;
 		private Integer rentPriceTo;
-		private String staffNameAssimentBuilding;
-		private String staffPhoneAssimentBuilding;
-		private String chooseStaffNameAssimentBuilding;
+		private String managerName;
+		private String managerPhone;
+		private String staffId;
 		private String[] types = new String[] {};
 
 
@@ -144,18 +146,18 @@ public class BuildingSearchBuilder {
 			return this;
 		}
 
-		public Builder setStaffNameAssimentBuilding(String staffNameAssimentBuilding) {
-			this.staffNameAssimentBuilding = staffNameAssimentBuilding;
+		public Builder setManagerName(String managerName) {
+			this.managerName = managerName;
 			return this;
 		}
 
-		public Builder setStaffPhoneAssimentBuilding(String staffPhoneAssimentBuilding) {
-			this.staffPhoneAssimentBuilding = staffPhoneAssimentBuilding;
+		public Builder setManagerPhone(String managerPhone) {
+			this.managerPhone = managerPhone;
 			return this;
 		}
 
-		public Builder setChooseStaffNameAssimentBuilding(String chooseStaffNameAssimentBuilding) {
-			this.chooseStaffNameAssimentBuilding = chooseStaffNameAssimentBuilding;
+		public Builder setStaffId(String staffId) {
+			this.staffId = staffId;
 			return this;
 		}
 

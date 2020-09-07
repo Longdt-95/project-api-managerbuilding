@@ -20,30 +20,30 @@ public class UserRepositoryIMPL extends SimpleJpaRepositoryIMPL<UserEntity> impl
 
 	@Override
 	public List<UserEntity> findAllUser(String role) {
-		String sql = "SELECT * FROM user u JOIN user_role ur on u.id = ur.userid JOIN role r on ur.roleid = r.id WHERE ur.roleid = " + role;
+		String sql = "SELECT * FROM user u JOIN user_role ur on u.id = ur.userid JOIN role r on ur.roleid = r.id WHERE r.code = '" + role + "'";
 		return this.findAll(sql);
 	}
 
 	@Override
 	public boolean isAssignmentBuilding(long staffId, long buildingId) {
-		String sql = "SELECT * FROM assignmentbuilding WHERE staffd = ? and buildingid = ?";
+		String sql = "SELECT * FROM assignmentbuilding WHERE staffid = ? and buildingid = ?";
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
+		boolean flag = false;
 		try {
 			connection = SingletonConnection.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
 			statement.setLong(1, staffId);
 			statement.setLong(2, buildingId);
-			return statement.execute();
+			resultSet = statement.executeQuery();
+			if (resultSet.next())
+				flag = true;
+			return flag;
 		} catch (SQLException  e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+				e.printStackTrace();
 			System.out.println(e.getMessage());
-			return false;
+			return flag;
 		} finally {
 			try {
 				if (connection != null) {
@@ -51,9 +51,6 @@ public class UserRepositoryIMPL extends SimpleJpaRepositoryIMPL<UserEntity> impl
 				}
 				if (statement != null) {
 					statement.close();
-				}
-				if (resultSet != null) {
-					resultSet.close();
 				}
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());

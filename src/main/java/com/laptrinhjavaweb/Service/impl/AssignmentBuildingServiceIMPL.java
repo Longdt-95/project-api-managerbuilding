@@ -14,7 +14,7 @@ public class AssignmentBuildingServiceIMPL implements AssignmentBuildingService 
 
 	@Override
 	public boolean assignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO) {
-		List<Long> newUserds = getNewStaffIds(assignmentBuildingDTO.getStaffId());
+		List<Long> newUserds = getNewStaffIds(assignmentBuildingDTO.getStaffIds());
 		List<Long> oldUserIds = assignmentBuildingRepository.getStaffIds(assignmentBuildingDTO.getBuildingId());
 		List<Long> isCheckedUsers = new ArrayList<>();
 		List<Long> unCheckedUsers = new ArrayList<>();

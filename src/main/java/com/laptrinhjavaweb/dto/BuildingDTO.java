@@ -31,7 +31,7 @@ public class BuildingDTO {
 	private String linkOfBuilding;
 	private String map;
 	private String avatar;
-	private String[] type = new String[] {};
+	private String[] types = new String[] {};
 	private String createdBy;
 	private Date createdDate;
 	private String modifiedBy;
@@ -189,11 +189,11 @@ public class BuildingDTO {
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
 	}
-	public String[] getType() {
-		return type;
+	public String[] getTypes() {
+		return types;
 	}
-	public void setType(String[] type) {
-		this.type = type;
+	public void setType(String[] types) {
+		this.types = types;
 	}
 	public String getCreatedBy() {
 		return createdBy;

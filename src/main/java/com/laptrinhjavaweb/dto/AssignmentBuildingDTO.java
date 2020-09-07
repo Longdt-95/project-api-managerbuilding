@@ -2,7 +2,7 @@ package com.laptrinhjavaweb.dto;
 
 public class AssignmentBuildingDTO {
 	private Long buildingId;
-	private Long[] staffId;
+	private Long[] staffIds;
 	
 	
 	public Long getBuildingId() {
@@ -11,11 +11,11 @@ public class AssignmentBuildingDTO {
 	public void setBuildingId(Long buildingId) {
 		this.buildingId = buildingId;
 	}
-	public Long[] getStaffId() {
-		return staffId;
+	public Long[] getStaffIds() {
+		return staffIds;
 	}
 	public void setStaffId(Long[] staffId) {
-		this.staffId = staffId;
+		this.staffIds = staffId;
 	}
 	
 		

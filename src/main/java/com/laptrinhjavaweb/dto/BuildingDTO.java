@@ -31,6 +31,7 @@ public class BuildingDTO {
 	private String linkOfBuilding;
 	private String map;
 	private String avatar;
+	private String type;
 	private String[] types = new String[] {};
 	private String createdBy;
 	private Date createdDate;
@@ -39,6 +40,13 @@ public class BuildingDTO {
 	private String rentArea;
 	private String[] rentAreas = new String[] {};
 	
+	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	public String[] getRentAreas() {
 		return rentAreas;
 	}

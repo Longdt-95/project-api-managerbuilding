@@ -8,17 +8,13 @@ import com.laptrinhjavaweb.Service.BuildingService;
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.enity.BuildingEntity;
-import com.laptrinhjavaweb.enity.RentAreaEntity;
 import com.laptrinhjavaweb.repository.JDBC.BuildingRepository;
-import com.laptrinhjavaweb.repository.JDBC.RentAreaRepository;
 import com.laptrinhjavaweb.repository.JDBC.impl.BuildingRepositoryIMPL;
-import com.laptrinhjavaweb.repository.JDBC.impl.RentAreaRepositoryIMPL;
 
 public class BuildingServiceIMPL implements BuildingService {
 
 	private BuildingRepository buildingRepository = new BuildingRepositoryIMPL();
 	private BuildingConvertor buildingConvetor = new BuildingConvertor();
-	private RentAreaRepository rentAreaEepository = new RentAreaRepositoryIMPL();
 
 	@Override
 	public List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
@@ -34,11 +30,21 @@ public class BuildingServiceIMPL implements BuildingService {
 
 	@Override
 	public BuildingDTO saveBuilding(BuildingDTO buildingDTO) {
-		buildingDTO.setRentAreas(buildingDTO.getRentArea().split(","));
-		BuildingDTO buildingDTOResult = new BuildingDTO();
-		long id = buildingRepository.saveWithTransaction(buildingDTO);
-		buildingDTOResult = buildingConvetor.convertToBuildingDTO(buildingRepository.findById(id));
+		String[] rentArea = buildingDTO.getRentArea().split(",");
+		BuildingEntity buildingEntity = buildingConvetor.convertToBuildingEntity(buildingDTO);
+		buildingEntity.setType(convertTypeToString(buildingDTO.getTypes()));
+		long id = buildingRepository.saveWithTransaction(buildingEntity, rentArea);
+		BuildingDTO buildingDTOResult = buildingConvetor.convertToBuildingDTO(buildingRepository.findById(id));
 		return buildingDTOResult;
+	}
+	
+	private String convertTypeToString(String[] type) {
+		StringBuilder stringBuilder = new StringBuilder();
+		for (String string : type) {
+			stringBuilder.append(string + ",");
+		}
+		String types = stringBuilder.toString();
+		return types.substring(0, types.length() - 1);
 	}
 
 	@Override
@@ -52,32 +58,20 @@ public class BuildingServiceIMPL implements BuildingService {
 		buildingEntity.setType(type.toString());
 		boolean flag = false;
 		if (buildingDTO.getRentAreas() != null) {
-			List<RentAreaEntity> result = rentAreaEepository.getRentArea(buildingDTO.getId());
-			List<Integer> oldValues = new ArrayList<Integer>();
-			List<Integer> newValues = new ArrayList<Integer>();
-			List<Integer> valuesDelete = new ArrayList<>();
-			List<Integer> valuesInsert = new ArrayList<>();
-			for (RentAreaEntity rentAreaEntity : result) {
-				oldValues.add(rentAreaEntity.getValue());
-			}
+			List<Integer> rentArea = new ArrayList<Integer>();
 			for (String string : buildingDTO.getRentAreas()) {
-				newValues.add(Integer.parseInt(string));
+				rentArea.add(Integer.parseInt(string));
 			}
-			for (Integer newValue : newValues) {
-				if (!oldValues.contains(newValue)) {
-					valuesInsert.add(newValue);
-				}
-			}
-			for (Integer oldValue : oldValues) {
-				if (!newValues.contains(oldValue)) {
-					valuesDelete.add(oldValue);
-				}
-			}
-			flag = buildingRepository.updateWithTransaction(buildingEntity, valuesDelete, valuesInsert);
+			flag = buildingRepository.updateWithTransaction(buildingEntity,rentArea);
 		}else {
 			flag = buildingRepository.update(buildingEntity);
 		}
 		return flag;
+	}
+
+	@Override
+	public boolean delBuilding(long buildingId) {
+		return buildingRepository.deleteWithTransaction(buildingId);
 	}
 
 }

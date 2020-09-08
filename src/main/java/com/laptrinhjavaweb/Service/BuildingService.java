@@ -9,4 +9,5 @@ public interface BuildingService {
 	List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder);
 	BuildingDTO saveBuilding(BuildingDTO buildingDTO);
 	boolean updateBuilding(BuildingDTO buildingDTO);
+	boolean delBuilding(long buildingId);
 }

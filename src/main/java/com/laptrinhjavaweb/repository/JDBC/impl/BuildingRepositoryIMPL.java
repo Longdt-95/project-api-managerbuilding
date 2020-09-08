@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
-import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.enity.BuildingEntity;
 import com.laptrinhjavaweb.repository.JDBC.BuildingRepository;
 
@@ -32,7 +31,7 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 	private StringBuilder buildSQLBuiSearchSpecial(BuildingSearchBuilder buildingSearchBuilder, StringBuilder sql) {
 		if (buildingSearchBuilder.getRentPriceFrom() != null) {
 			sql.append(" AND b.rentprice >= " + buildingSearchBuilder.getRentPriceFrom());
-		} 
+		}
 		if (buildingSearchBuilder.getRentPriceTo() != null) {
 			sql.append(" AND b.rentprice <= " + buildingSearchBuilder.getRentPriceTo());
 		}
@@ -89,7 +88,7 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 	}
 
 	@SuppressWarnings({ "unused", "static-access" })
-	public long saveWithTransaction(BuildingDTO buildingDTO) {
+	public long saveWithTransaction(BuildingEntity buildingEntity, String[] rentArea) {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
@@ -97,9 +96,9 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 		try {
 			connection = SingletonConnection.getInstance().getConnection();
 			connection.setAutoCommit(false);
-			String sqlInsertBuilding = buildSQLInsertBuilding(buildingDTO);
+			String sqlInsertBuilding = buildSQLInsertBuilding(buildingEntity);
 			statement = connection.prepareStatement(sqlInsertBuilding, statement.RETURN_GENERATED_KEYS);
-			setParameter(statement, buildingDTO);
+			setParameter(statement, buildingEntity);
 			statement.executeUpdate();
 			resultSet = statement.getGeneratedKeys();
 			while (resultSet.next()) {
@@ -107,7 +106,7 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 			}
 			String sqlInsertBuildingRentArea = "INSERT INTO rentarea(value, buildingid) values (?,?)";
 			statement = connection.prepareStatement(sqlInsertBuildingRentArea, statement.RETURN_GENERATED_KEYS);
-			for (String string : buildingDTO.getRentAreas()) {
+			for (String string : rentArea) {
 				statement.setInt(1, Integer.parseInt(string));
 				statement.setLong(2, buildingId);
 				statement.executeUpdate();
@@ -142,15 +141,15 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 	}
 
 	// buildSQLQuery insertBuilding
-	private String buildSQLInsertBuilding(BuildingDTO buildingDTO) {
-		Field[] fields = BuildingDTO.class.getDeclaredFields();
+	private String buildSQLInsertBuilding(BuildingEntity buildingEntity) {
+		Field[] fields = BuildingEntity.class.getDeclaredFields();
 		StringBuilder name = new StringBuilder();
 		StringBuilder parameter = new StringBuilder();
 		String sql;
 		for (int i = 0; i < fields.length; i++) {
 			fields[i].setAccessible(true);
 			try {
-				if (i >= 1 && !fields[i].getName().equals("rentArea") && !fields[i].getName().equals("rentAreas")) {
+				if (!fields[i].getName().equals("id")) {
 					name.append(fields[i].getName().toLowerCase() + ",");
 					parameter.append("?,");
 				}
@@ -165,33 +164,23 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 	}
 
 	// convert Type from array to String
-	private String convertTypeToString(String[] type) {
-		StringBuilder stringBuilder = new StringBuilder();
-		for (String string : type) {
-			stringBuilder.append(string + ",");
-		}
-		String types = stringBuilder.toString();
-		return types.substring(0, types.length() - 1);
-	}
+	/*
+	 * private String convertTypeToString(String[] type) { StringBuilder
+	 * stringBuilder = new StringBuilder(); for (String string : type) {
+	 * stringBuilder.append(string + ","); } String types =
+	 * stringBuilder.toString(); return types.substring(0, types.length() - 1); }
+	 */
 
 	// set param for sql insertBuilding
-	private void setParameter(PreparedStatement statement, BuildingDTO buildingDTO) {
-		Field[] fields = BuildingDTO.class.getDeclaredFields();
+	private void setParameter(PreparedStatement statement, BuildingEntity buildingEntity) {
+		Field[] fields = BuildingEntity.class.getDeclaredFields();
+		int index = 1;
 		for (int i = 0; i < fields.length; i++) {
 			fields[i].setAccessible(true);
 			try {
-				int index = 1;
-				for (Field field : buildingDTO.getClass().getDeclaredFields()) {
-					field.setAccessible(true);
-					if (!field.getName().equals("id") && !field.getName().equals("rentArea")
-							&& !field.getName().equals("rentAreas") && !field.getName().equals("type")) {
-						statement.setObject(index, field.get(buildingDTO));
-						index++;
-					} else if (field.getName().equals("type")) {
-						String type = convertTypeToString(buildingDTO.getTypes());
-						statement.setObject(index, type);
-						index++;
-					}
+				if (!fields[i].getName().equals("id")) {
+					statement.setObject(index, fields[i].get(buildingEntity));
+					index++;
 				}
 			} catch (IllegalArgumentException | IllegalAccessException | SQLException e) {
 				System.out.println(e.getMessage());
@@ -201,7 +190,7 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 
 	@SuppressWarnings("resource")
 	@Override
-	public boolean updateWithTransaction(BuildingEntity buildingEntity, List<Integer> valuesDelete, List<Integer> valuesInsert) {
+	public boolean updateWithTransaction(BuildingEntity buildingEntity, List<Integer> rentArea) {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		boolean flag = false;
@@ -223,17 +212,13 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 			}
 			statement.setObject(index, t);
 			statement.execute();
-			// save RentArea
-			String sqlDeleteRentArea = "DELETE FROM rentarea WHERE value = ? AND buildingid = ?";
+			String sqlDeleteRentArea = "DELETE FROM rentarea WHERE buildingid = ?";
 			statement = connection.prepareStatement(sqlDeleteRentArea);
-			for (Integer value : valuesDelete) {
-				statement.setInt(1, value);
-				statement.setLong(2, buildingEntity.getId());
-				statement.execute();
-			}
+			statement.setLong(1, buildingEntity.getId());
+			statement.execute();
 			String sqlInsertRentArea = "INSERT INTO rentarea(value,buildingid) VALUES(?,?)";
 			statement = connection.prepareStatement(sqlInsertRentArea);
-			for (Integer value : valuesInsert) {
+			for (int value : rentArea) {
 				statement.setInt(1, value);
 				statement.setLong(2, buildingEntity.getId());
 				statement.execute();
@@ -310,8 +295,5 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 			}
 		}
 	}
-
-
-	
 
 }

@@ -19,7 +19,7 @@ public class UserRepositoryIMPL extends SimpleJpaRepositoryIMPL<UserEntity> impl
 	}
 
 	@Override
-	public List<UserEntity> findAllUser(String role) {
+	public List<UserEntity> findAllStaff(String role) {
 		String sql = "SELECT * FROM user u JOIN user_role ur on u.id = ur.userid JOIN role r on ur.roleid = r.id WHERE r.code = '" + role + "'";
 		return this.findAll(sql);
 	}
@@ -37,8 +37,9 @@ public class UserRepositoryIMPL extends SimpleJpaRepositoryIMPL<UserEntity> impl
 			statement.setLong(1, staffId);
 			statement.setLong(2, buildingId);
 			resultSet = statement.executeQuery();
-			if (resultSet.next())
+			if (resultSet.next()) {
 				flag = true;
+			}
 			return flag;
 		} catch (SQLException  e) {
 				e.printStackTrace();
@@ -51,6 +52,9 @@ public class UserRepositoryIMPL extends SimpleJpaRepositoryIMPL<UserEntity> impl
 				}
 				if (statement != null) {
 					statement.close();
+				}
+				if (resultSet != null) {
+					resultSet.close();
 				}
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());

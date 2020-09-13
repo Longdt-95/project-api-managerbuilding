@@ -29,6 +29,7 @@ public class BuildingAPI {
 
 	private BuildingService buildingService = new BuildingServiceIMPL();
 	private AssignmentBuildingService assignmentBuildingService = new AssignmentBuildingServiceIMPL();
+	private UserService userService = new UserServiceIMPL();
 
 	@GetMapping("/buildings")
 	public List<BuildingDTO> getBuildings(@RequestParam Map<String, String> requestParams,
@@ -42,11 +43,10 @@ public class BuildingAPI {
 		return buildingService.saveBuilding(buildingDTO);
 	}
 
-	private UserService userService = new UserServiceIMPL();
 
 	@GetMapping("/building/staff")
 	public List<UserDTO> getUsers(@RequestParam long buildingid, @RequestParam String role) {
-		List<UserDTO> listResult = userService.findAllUser(buildingid, role);
+		List<UserDTO> listResult = userService.findAllStaff(buildingid, role);
 		return listResult;
 	}
 

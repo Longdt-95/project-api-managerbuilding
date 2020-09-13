@@ -21,10 +21,12 @@ public class ObjectMapper<T> {
 					Object columnValue = resultSet.getObject(columnName);
 					for (Field field : fields) {
 						field.setAccessible(true);
-						Column column = field.getAnnotation(Column.class);
-						if (column.name().equals(columnName) && columnValue != null) {
-							field.set(object, columnValue);
-							break;
+						if (field.get(object) == null) {
+							Column column = field.getAnnotation(Column.class);
+							if (column.name().equals(columnName) && columnValue != null) {
+								field.set(object, columnValue);
+								break;
+							}
 						}
 					}
 				}

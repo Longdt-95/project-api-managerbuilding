@@ -5,7 +5,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
 import com.laptrinhjavaweb.enity.BuildingEntity;
@@ -45,7 +47,8 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 			}
 			sql.append(" )");
 		}
-		if (buildingSearchBuilder.getTypes() != null) {
+		/*java 7*/
+		/*if (buildingSearchBuilder.getTypes() != null) {
 			int lengthType = buildingSearchBuilder.getTypes().length;
 			sql.append(" and (b.type like '%" + buildingSearchBuilder.getTypes()[0] + "%'");
 			for (int i = 1; i < lengthType; i++) {
@@ -54,8 +57,17 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 				}
 			}
 			sql.append(")");
-		}
+		}*/
 
+		/*java 8*/
+		if (buildingSearchBuilder.getTypes() != null) {
+			sql.append(" and (");
+			String sqlType = Arrays.stream(buildingSearchBuilder.getTypes())
+									.map(item -> "b.type like '%"+item+"%'")
+									.collect(Collectors.joining(" OR "));
+			sql.append(sqlType);
+			sql.append(")");
+		}
 		return sql;
 	}
 

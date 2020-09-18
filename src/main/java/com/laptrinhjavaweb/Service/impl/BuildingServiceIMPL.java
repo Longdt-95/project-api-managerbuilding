@@ -2,6 +2,7 @@ package com.laptrinhjavaweb.Service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.laptrinhjavaweb.Convertor.BuildingConvertor;
 import com.laptrinhjavaweb.Service.BuildingService;
@@ -14,27 +15,35 @@ import com.laptrinhjavaweb.repository.JDBC.impl.BuildingRepositoryIMPL;
 public class BuildingServiceIMPL implements BuildingService {
 
 	private BuildingRepository buildingRepository = new BuildingRepositoryIMPL();
-	private BuildingConvertor buildingConvetor = new BuildingConvertor();
+	private BuildingConvertor buildingConvertor = new BuildingConvertor();
 
 	@Override
 	public List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
-		List<BuildingEntity> listBuildingEntitie = buildingRepository.getBuildings(buildingSearchBuilder);
-		List<BuildingDTO> listBuildingDTO = new ArrayList<BuildingDTO>();
-		BuildingDTO buildingDTO = new BuildingDTO();
-		for (BuildingEntity buildingEntity : listBuildingEntitie) {
+		/*java 7*/
+		/*List<BuildingEntity> buildingEntities = buildingRepository.getBuildings(buildingSearchBuilder);
+		List<BuildingDTO> listBuildingDTO = new ArrayList<>();
+		for (BuildingEntity buildingEntity : buildingEntities) {
+			BuildingDTO buildingDTO = new BuildingDTO();
 			buildingDTO = buildingConvetor.convertToBuildingDTO(buildingEntity);
 			listBuildingDTO.add(buildingDTO);
 		}
-		return listBuildingDTO;
+		return listBuildingDTO;*/
+
+		/*java 8*/
+		List<BuildingEntity> buildingEntities = buildingRepository.getBuildings(buildingSearchBuilder);
+		List<BuildingDTO> result = buildingEntities.stream()
+													.map(item -> buildingConvertor.convertToBuildingDTO(item))
+													.collect(Collectors.toList());
+		return result;
 	}
 
 	@Override
 	public BuildingDTO saveBuilding(BuildingDTO buildingDTO) {
 		String[] rentArea = buildingDTO.getRentArea().split(",");
-		BuildingEntity buildingEntity = buildingConvetor.convertToBuildingEntity(buildingDTO);
+		BuildingEntity buildingEntity = buildingConvertor.convertToBuildingEntity(buildingDTO);
 		buildingEntity.setType(convertTypeToString(buildingDTO.getTypes()));
 		long id = buildingRepository.saveWithTransaction(buildingEntity, rentArea);
-		BuildingDTO buildingDTOResult = buildingConvetor.convertToBuildingDTO(buildingRepository.findById(id));
+		BuildingDTO buildingDTOResult = buildingConvertor.convertToBuildingDTO(buildingRepository.findById(id));
 		return buildingDTOResult;
 	}
 	
@@ -49,7 +58,7 @@ public class BuildingServiceIMPL implements BuildingService {
 
 	@Override
 	public boolean updateBuilding(BuildingDTO buildingDTO) {
-		BuildingEntity buildingEntity = buildingConvetor.convertToBuildingEntity(buildingDTO);
+		BuildingEntity buildingEntity = buildingConvertor.convertToBuildingEntity(buildingDTO);
 		StringBuilder type = new StringBuilder();
 		for (String string : buildingDTO.getTypes()) {
 			type.append(string + ",");

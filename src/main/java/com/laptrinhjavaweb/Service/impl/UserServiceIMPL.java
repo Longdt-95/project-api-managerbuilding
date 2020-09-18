@@ -2,6 +2,7 @@ package com.laptrinhjavaweb.Service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.laptrinhjavaweb.Convertor.UserConvertor;
 import com.laptrinhjavaweb.Service.UserService;
@@ -17,15 +18,21 @@ public class UserServiceIMPL implements UserService {
 
 	@Override
 	public List<UserDTO> findAllUser(long buildingId, String role) {
-		List<UserDTO> result = new ArrayList<>();
 		List<UserEntity> staffs = useRepository.findAllUser(role);
-		for (int i = 0; i < staffs.size(); i++) {
-			UserDTO dto = userConvertor.convertToUserDTO(staffs.get(i));
+		/*for (UserEntity userEntity: staffs) {
+			UserDTO dto = userConvertor.convertToUserDTO(userEntity);
 			if (useRepository.isAssignmentBuilding(dto.getId(), buildingId) ==  true) {
 				dto.setChecked("checked");
 			}
 			result.add(dto);
-		}
+		}*/
+		List<UserDTO> result = staffs.stream().map(item -> {
+			UserDTO dto = userConvertor.convertToUserDTO(item);
+			if (useRepository.isAssignmentBuilding(dto.getId(), buildingId) ==  true) {
+				dto.setChecked("checked");
+			}
+			return dto;
+		}).collect(Collectors.toList());
 		return result;
 	}
 }

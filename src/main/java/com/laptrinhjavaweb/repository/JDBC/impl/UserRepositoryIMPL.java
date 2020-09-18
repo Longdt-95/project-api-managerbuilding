@@ -37,8 +37,9 @@ public class UserRepositoryIMPL extends SimpleJpaRepositoryIMPL<UserEntity> impl
 			statement.setLong(1, staffId);
 			statement.setLong(2, buildingId);
 			resultSet = statement.executeQuery();
-			if (resultSet.next())
+			if (resultSet.next()) {
 				flag = true;
+			}
 			return flag;
 		} catch (SQLException  e) {
 				e.printStackTrace();

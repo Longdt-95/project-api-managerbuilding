@@ -37,6 +37,11 @@ public class BuildingServiceIMPL implements BuildingService {
 		List<BuildingDTO> result = listBuildingEntitie.stream()
 										.map(item -> buildingConvertor.convertToBuildingDTO(item))
 										.collect(Collectors.toList());
+		
+//		List<BuildingEntity> listBuildingEntitie = buildingRepository.getBuildings(buildingSearchBuilder);
+//		List<BuildingDTO> result = listBuildingEntitie.stream()
+//										.map(buildingConvertor::convertToBuildingDTO)
+//										.collect(Collectors.toList());
 		return result;
 	}
 

@@ -311,4 +311,18 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 		}
 	}
 
+	@Override
+	public List<BuildingEntity> findAllBuildingsByStaffId(long staffId) {
+		String sql = "SELECT * FROM building b JOIN assignmentbuilding a ON b.id = a.buildingid WHERE a.staffid = " + staffId;
+		return findAll(sql);
+	}
+
+	@Override
+	public List<BuildingEntity> getBuildingsPrioritize(long staffId, String prioritize) {
+		String sql = "SELECT * FROM building b JOIN assignmentbuilding a ON b.id = a.buildingid WHERE a.staffid = "
+					+ staffId + " AND a.status = " + prioritize;  
+		List<BuildingEntity> buildingEntities = findAll(sql);
+		return buildingEntities;
+	}
+
 }

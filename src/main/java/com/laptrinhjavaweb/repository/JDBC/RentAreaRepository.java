@@ -7,4 +7,5 @@ import com.laptrinhjavaweb.enity.RentAreaEntity;
 public interface RentAreaRepository {
 
 	List<RentAreaEntity> getRentArea(long id);
+	
 }

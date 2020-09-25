@@ -11,4 +11,5 @@ public interface AssignmentBuildingRepository extends SimpleJpaRepository<Assign
 	long assignmentBuilding(Long newStaffId, long buildingId);
 	List<AssignmentBuildingEntity> findAllStaffAssignmentBuildingByBuildingId(long buildingId);
 	boolean assignBuilding(List<Long> isCheckedUsers, List<Long> unCheckedUsers, Long BuildingId);
+	boolean updateStatus(AssignmentBuildingEntity assignmentBuildingEntity);
 }

@@ -11,5 +11,7 @@ public interface BuildingRepository extends SimpleJpaRepository<BuildingEntity>{
 	BuildingEntity findById(long id);
 	boolean updateWithTransaction(BuildingEntity buildingEntity, List<Integer> rentArea);
 	boolean deleteWithTransaction(long id);
+	List<BuildingEntity> findAllBuildingsByStaffId(long staffId);
+	List<BuildingEntity> getBuildingsPrioritize(long staffId, String prioritize);
 	
 }

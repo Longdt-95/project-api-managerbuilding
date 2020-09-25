@@ -10,4 +10,7 @@ public interface BuildingService {
 	BuildingDTO saveBuilding(BuildingDTO buildingDTO);
 	boolean updateBuilding(BuildingDTO buildingDTO);
 	boolean delBuilding(long buildingId);
+	BuildingDTO getBuilding(long id);
+	List<BuildingDTO> getListBuildingByStaffId(long staffId);
+	List<BuildingDTO> getBuildingsPrioritize(long staffId, String prioritize);
 }

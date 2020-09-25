@@ -3,6 +3,7 @@ package com.laptrinhjavaweb.Service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.laptrinhjavaweb.Convertor.GenericConvertor;
 import com.laptrinhjavaweb.Convertor.UserConvertor;
 import com.laptrinhjavaweb.Service.UserService;
 import com.laptrinhjavaweb.dto.UserDTO;
@@ -14,6 +15,7 @@ public class UserServiceIMPL implements UserService {
 
 	private UserRepository useRepository = new UserRepositoryIMPL();
 	private UserConvertor userConvertor = new UserConvertor();
+	private GenericConvertor<UserDTO, UserEntity> convertor = new GenericConvertor<>();
 
 	@Override
 	public List<UserDTO> findAllStaff(long buildingId, String role) {
@@ -33,7 +35,7 @@ public class UserServiceIMPL implements UserService {
 		
 		List<UserEntity> staffs = useRepository.findAllStaff(role);
 		List<UserDTO> result = staffs.stream().map(item -> {
-			UserDTO dto = userConvertor.convertToUserDTO(item);
+			UserDTO dto = convertor.convertorToDTO(item);
 			if (useRepository.isAssignmentBuilding(dto.getId(), buildingId) ==  true) {
 				dto.setChecked("checked");
 			}

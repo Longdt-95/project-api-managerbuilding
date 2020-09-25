@@ -1,6 +1,7 @@
 
 package com.laptrinhjavaweb.api;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,10 +33,27 @@ public class BuildingAPI {
 	private UserService userService = new UserServiceIMPL();
 
 	@GetMapping("/buildings")
-	public List<BuildingDTO> getBuildings(@RequestParam Map<String, String> requestParams,
+	public List<BuildingDTO> getBuildingsSearch(@RequestParam Map<String, String> requestParams,
 			@RequestParam String[] type) {
 		BuildingSearchBuilder buildingSearchBuilder = convertMapToBuilder(requestParams, type);
 		return buildingService.getBuildings(buildingSearchBuilder);
+	}
+	
+	@GetMapping("/buildings/assignment")
+	public List<BuildingDTO> getBuildingsByStaffId(@RequestParam long staffId) {
+		List<BuildingDTO> buildingDTOs = new ArrayList<>();
+		buildingDTOs = buildingService.getListBuildingByStaffId(staffId);
+		return buildingDTOs;
+	}
+	
+	@GetMapping("buildings/myList")
+	public List<BuildingDTO> getBuildingsPrioritize(@RequestParam long staffId, String prioritize) {
+		return buildingService.getBuildingsPrioritize(staffId,prioritize);
+	}
+	
+	@GetMapping("/building/detail")
+	public BuildingDTO getbuilding(@RequestParam long id) {
+		return buildingService.getBuilding(id);
 	}
 
 	@PostMapping("/buildings")
@@ -64,6 +82,7 @@ public class BuildingAPI {
 	public boolean delBuilding(@RequestParam long buildingId) {  
 		return buildingService.delBuilding(buildingId);
 	}
+	
 	
 	private BuildingSearchBuilder convertMapToBuilder(Map<String, String> requestParams, String[] type) {
 

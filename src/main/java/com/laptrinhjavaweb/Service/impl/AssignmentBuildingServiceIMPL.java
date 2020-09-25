@@ -3,14 +3,17 @@ package com.laptrinhjavaweb.Service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.laptrinhjavaweb.Convertor.AssignmentBuildingConvertor;
 import com.laptrinhjavaweb.Service.AssignmentBuildingService;
 import com.laptrinhjavaweb.dto.AssignmentBuildingDTO;
+import com.laptrinhjavaweb.enity.AssignmentBuildingEntity;
 import com.laptrinhjavaweb.repository.JDBC.AssignmentBuildingRepository;
 import com.laptrinhjavaweb.repository.JDBC.impl.AssignmentBuildingRepositoryIMPL;
 
 public class AssignmentBuildingServiceIMPL implements AssignmentBuildingService {
 
 	private AssignmentBuildingRepository assignmentBuildingRepository = new AssignmentBuildingRepositoryIMPL();
+	private AssignmentBuildingConvertor assignmentBuildingConvertor = new AssignmentBuildingConvertor();
 
 	@Override
 	public boolean assignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO) {
@@ -39,6 +42,12 @@ public class AssignmentBuildingServiceIMPL implements AssignmentBuildingService 
 			result.add(long1);
 		}
 		return result;
+	}
+
+	@Override
+	public boolean updateStatus(AssignmentBuildingDTO assignmentBuildingDTO) {
+		AssignmentBuildingEntity assignmentBuildingEntity = assignmentBuildingConvertor.convertToAssignmentBuildingEntity(assignmentBuildingDTO);
+		return assignmentBuildingRepository.updateStatus(assignmentBuildingEntity);
 	}
 
 }

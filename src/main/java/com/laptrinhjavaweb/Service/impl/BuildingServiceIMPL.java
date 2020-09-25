@@ -9,13 +9,17 @@ import com.laptrinhjavaweb.Service.BuildingService;
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.enity.BuildingEntity;
+import com.laptrinhjavaweb.enity.RentAreaEntity;
 import com.laptrinhjavaweb.repository.JDBC.BuildingRepository;
+import com.laptrinhjavaweb.repository.JDBC.RentAreaRepository;
 import com.laptrinhjavaweb.repository.JDBC.impl.BuildingRepositoryIMPL;
+import com.laptrinhjavaweb.repository.JDBC.impl.RentAreaRepositoryIMPL;
 
 public class BuildingServiceIMPL implements BuildingService {
 
 	private BuildingRepository buildingRepository = new BuildingRepositoryIMPL();
 	private BuildingConvertor buildingConvertor = new BuildingConvertor();
+	private RentAreaRepository rentAreaRepository = new RentAreaRepositoryIMPL(); 
 
 	@Override
 	public List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
@@ -84,6 +88,47 @@ public class BuildingServiceIMPL implements BuildingService {
 	@Override
 	public boolean delBuilding(long buildingId) {
 		return buildingRepository.deleteWithTransaction(buildingId);
+	}
+
+	@Override
+	public BuildingDTO getBuilding(long id) {
+		BuildingDTO buildingDTO = new BuildingDTO();
+		List<RentAreaEntity> rentAreaEntities = new ArrayList<>(); 
+		buildingDTO = buildingConvertor.convertToBuildingDTO(buildingRepository.findById(id));
+		rentAreaEntities = rentAreaRepository.getRentArea(id);
+		String rentArea = rentAreaEntities.stream().map(item -> item.getValue().toString()).collect(Collectors.joining(","));
+		buildingDTO.setRentArea(rentArea);
+		return buildingDTO;
+	}
+
+	@Override
+	public List<BuildingDTO> getListBuildingByStaffId(long staffId) {
+		List<BuildingDTO> buildingDTOs = new ArrayList<>();
+		List<BuildingEntity> listBuildingEntitie = buildingRepository.findAllBuildingsByStaffId(staffId);
+		buildingDTOs = listBuildingEntitie.stream()
+										.map(item -> buildingConvertor.convertToBuildingDTO(item))
+										.collect(Collectors.toList());
+		for (int i = 0; i < buildingDTOs.size(); i++) {
+			List<RentAreaEntity> areaEntities = new ArrayList<>();
+			areaEntities = rentAreaRepository.getRentArea(listBuildingEntitie.get(i).getId());
+			String rentArea = areaEntities.stream().map(item -> item.getValue().toString()).collect(Collectors.joining(","));
+			buildingDTOs.get(i).setRentArea(rentArea);
+		}
+		return buildingDTOs;
+	}
+
+	@Override
+	public List<BuildingDTO> getBuildingsPrioritize(long staffId, String prioritize) {
+		List<BuildingEntity> buildingEntities = buildingRepository.getBuildingsPrioritize(staffId, prioritize);
+		List<BuildingDTO> buildingDTOs = buildingEntities.stream()
+										 .map(item -> buildingConvertor.convertToBuildingDTO(item)).collect(Collectors.toList());
+		for (int i = 0; i < buildingDTOs.size(); i++) {
+			List<RentAreaEntity> areaEntities = new ArrayList<>();
+			areaEntities = rentAreaRepository.getRentArea(buildingEntities.get(i).getId());
+			String rentArea = areaEntities.stream().map(item -> item.getValue().toString()).collect(Collectors.joining(","));
+			buildingDTOs.get(i).setRentArea(rentArea);
+		}
+		return buildingDTOs;
 	}
 
 }

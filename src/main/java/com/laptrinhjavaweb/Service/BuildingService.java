@@ -6,6 +6,7 @@ import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 
 public interface BuildingService {
+	
 	List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder);
 	BuildingDTO saveBuilding(BuildingDTO buildingDTO);
 	boolean updateBuilding(BuildingDTO buildingDTO);

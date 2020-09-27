@@ -1,14 +1,17 @@
-package com.laptrinhjavaweb.dto.output;
+package com.laptrinhjavaweb.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.laptrinhjavaweb.dto.output.MasterData;
+import com.laptrinhjavaweb.dto.output.TransactionTypeOutput;
 import com.laptrinhjavaweb.enums.TransactionTypeEnum;
 
-public class TransactionTypeOutput extends MasterData {
-	
-	public static List<TransactionTypeOutput> getList() {
-		List<TransactionTypeOutput> result = new ArrayList<>();
+public class TransactionTypeMasterData implements MasterDataUtil {
+
+	@Override
+	public List<MasterData> getMasterData() {
+		List<MasterData> result = new ArrayList<>();
 		for (TransactionTypeEnum enum1 : TransactionTypeEnum.values()) {
 			TransactionTypeOutput output = new TransactionTypeOutput();
 			output.setCode(enum1.name());

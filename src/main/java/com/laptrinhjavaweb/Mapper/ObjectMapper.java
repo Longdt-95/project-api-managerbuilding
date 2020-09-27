@@ -9,6 +9,7 @@ import java.util.List;
 import com.laptrinhjavaweb.annotation.Column;
 
 public class ObjectMapper<T> {
+
 	public List<T> maprow(ResultSet resultSet, Class<T> zClass) {
 		List<T> listResult = new ArrayList<T>();
 		try {
@@ -22,10 +23,10 @@ public class ObjectMapper<T> {
 					for (Field field : fields) {
 						field.setAccessible(true);
 //						if (field.get(object) == null) {
-							Column column = field.getAnnotation(Column.class);
-							if (column.name().equals(columnName) && columnValue != null) {
-								field.set(object, columnValue);
-								break;
+						Column column = field.getAnnotation(Column.class);
+						if (column.name().equals(columnName) && columnValue != null) {
+							field.set(object, columnValue);
+							break;
 //							}
 						}
 					}

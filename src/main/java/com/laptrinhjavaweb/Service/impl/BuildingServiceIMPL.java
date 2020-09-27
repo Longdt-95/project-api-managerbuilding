@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import com.laptrinhjavaweb.Convertor.BuildingConvertor;
 import com.laptrinhjavaweb.Service.BuildingService;
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
@@ -15,32 +19,35 @@ import com.laptrinhjavaweb.repository.JDBC.RentAreaRepository;
 import com.laptrinhjavaweb.repository.JDBC.impl.BuildingRepositoryIMPL;
 import com.laptrinhjavaweb.repository.JDBC.impl.RentAreaRepositoryIMPL;
 
+@Component
+@Service
 public class BuildingServiceIMPL implements BuildingService {
 
 	private BuildingRepository buildingRepository = new BuildingRepositoryIMPL();
-	private BuildingConvertor buildingConvertor = new BuildingConvertor();
-	private RentAreaRepository rentAreaRepository = new RentAreaRepositoryIMPL(); 
+	private RentAreaRepository rentAreaRepository = new RentAreaRepositoryIMPL();
+	@Autowired
+	private BuildingConvertor buildingConvertor;
 
 	@Override
 	public List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
-		
+
 		// syntax JAVA 7
-		
-	/*	List<BuildingEntity> listBuildingEntitie = buildingRepository.getBuildings(buildingSearchBuilder);
-		List<BuildingDTO> listBuildingDTO = new ArrayList<BuildingDTO>();
-		for (BuildingEntity buildingEntity : listBuildingEntitie) {
-			BuildingDTO buildingDTO = new BuildingDTO();
-			buildingDTO = buildingConvetor.convertToBuildingDTO(buildingEntity);
-			listBuildingDTO.add(buildingDTO);
-		}
-		return listBuildingDTO; */
-		
+
+		/*
+		 * List<BuildingEntity> listBuildingEntitie =
+		 * buildingRepository.getBuildings(buildingSearchBuilder); List<BuildingDTO>
+		 * listBuildingDTO = new ArrayList<BuildingDTO>(); for (BuildingEntity
+		 * buildingEntity : listBuildingEntitie) { BuildingDTO buildingDTO = new
+		 * BuildingDTO(); buildingDTO =
+		 * buildingConvetor.convertToBuildingDTO(buildingEntity);
+		 * listBuildingDTO.add(buildingDTO); } return listBuildingDTO;
+		 */
+
 		// syntax JAVA 8
-		
+
 		List<BuildingEntity> listBuildingEntitie = buildingRepository.getBuildings(buildingSearchBuilder);
 		List<BuildingDTO> result = listBuildingEntitie.stream()
-										.map(item -> buildingConvertor.convertToBuildingDTO(item))
-										.collect(Collectors.toList());
+				.map(item -> buildingConvertor.convertToBuildingDTO(item)).collect(Collectors.toList());
 		return result;
 	}
 
@@ -53,7 +60,7 @@ public class BuildingServiceIMPL implements BuildingService {
 		BuildingDTO buildingDTOResult = buildingConvertor.convertToBuildingDTO(buildingRepository.findById(id));
 		return buildingDTOResult;
 	}
-	
+
 	private String convertTypeToString(String[] type) {
 		StringBuilder stringBuilder = new StringBuilder();
 		for (String string : type) {
@@ -78,8 +85,8 @@ public class BuildingServiceIMPL implements BuildingService {
 			for (String string : buildingDTO.getRentAreas()) {
 				rentArea.add(Integer.parseInt(string));
 			}
-			flag = buildingRepository.updateWithTransaction(buildingEntity,rentArea);
-		}else {
+			flag = buildingRepository.updateWithTransaction(buildingEntity, rentArea);
+		} else {
 			flag = buildingRepository.update(buildingEntity);
 		}
 		return flag;
@@ -93,10 +100,11 @@ public class BuildingServiceIMPL implements BuildingService {
 	@Override
 	public BuildingDTO getBuilding(long id) {
 		BuildingDTO buildingDTO = new BuildingDTO();
-		List<RentAreaEntity> rentAreaEntities = new ArrayList<>(); 
+		List<RentAreaEntity> rentAreaEntities = new ArrayList<>();
 		buildingDTO = buildingConvertor.convertToBuildingDTO(buildingRepository.findById(id));
 		rentAreaEntities = rentAreaRepository.getRentArea(id);
-		String rentArea = rentAreaEntities.stream().map(item -> item.getValue().toString()).collect(Collectors.joining(","));
+		String rentArea = rentAreaEntities.stream().map(item -> item.getValue().toString())
+				.collect(Collectors.joining(","));
 		buildingDTO.setRentArea(rentArea);
 		return buildingDTO;
 	}
@@ -105,13 +113,13 @@ public class BuildingServiceIMPL implements BuildingService {
 	public List<BuildingDTO> getListBuildingByStaffId(long staffId) {
 		List<BuildingDTO> buildingDTOs = new ArrayList<>();
 		List<BuildingEntity> listBuildingEntitie = buildingRepository.findAllBuildingsByStaffId(staffId);
-		buildingDTOs = listBuildingEntitie.stream()
-										.map(item -> buildingConvertor.convertToBuildingDTO(item))
-										.collect(Collectors.toList());
+		buildingDTOs = listBuildingEntitie.stream().map(item -> buildingConvertor.convertToBuildingDTO(item))
+				.collect(Collectors.toList());
 		for (int i = 0; i < buildingDTOs.size(); i++) {
 			List<RentAreaEntity> areaEntities = new ArrayList<>();
 			areaEntities = rentAreaRepository.getRentArea(listBuildingEntitie.get(i).getId());
-			String rentArea = areaEntities.stream().map(item -> item.getValue().toString()).collect(Collectors.joining(","));
+			String rentArea = areaEntities.stream().map(item -> item.getValue().toString())
+					.collect(Collectors.joining(","));
 			buildingDTOs.get(i).setRentArea(rentArea);
 		}
 		return buildingDTOs;
@@ -121,11 +129,12 @@ public class BuildingServiceIMPL implements BuildingService {
 	public List<BuildingDTO> getBuildingsPrioritize(long staffId, String prioritize) {
 		List<BuildingEntity> buildingEntities = buildingRepository.getBuildingsPrioritize(staffId, prioritize);
 		List<BuildingDTO> buildingDTOs = buildingEntities.stream()
-										 .map(item -> buildingConvertor.convertToBuildingDTO(item)).collect(Collectors.toList());
+				.map(item -> buildingConvertor.convertToBuildingDTO(item)).collect(Collectors.toList());
 		for (int i = 0; i < buildingDTOs.size(); i++) {
 			List<RentAreaEntity> areaEntities = new ArrayList<>();
 			areaEntities = rentAreaRepository.getRentArea(buildingEntities.get(i).getId());
-			String rentArea = areaEntities.stream().map(item -> item.getValue().toString()).collect(Collectors.joining(","));
+			String rentArea = areaEntities.stream().map(item -> item.getValue().toString())
+					.collect(Collectors.joining(","));
 			buildingDTOs.get(i).setRentArea(rentArea);
 		}
 		return buildingDTOs;

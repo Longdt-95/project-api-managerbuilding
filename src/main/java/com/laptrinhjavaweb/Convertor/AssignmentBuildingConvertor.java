@@ -7,13 +7,16 @@ import com.laptrinhjavaweb.enity.AssignmentBuildingEntity;
 
 public class AssignmentBuildingConvertor {
 	ModelMapper modelMapper = new ModelMapper();
-	public AssignmentBuildingEntity convertToAssignmentBuildingEntity(AssignmentBuildingDTO assignmentBuildingDTO ) {
-		AssignmentBuildingEntity assignmentBuildingEntity = modelMapper.map(assignmentBuildingDTO, AssignmentBuildingEntity.class);
+
+	public AssignmentBuildingEntity convertToAssignmentBuildingEntity(AssignmentBuildingDTO assignmentBuildingDTO) {
+		AssignmentBuildingEntity assignmentBuildingEntity = modelMapper.map(assignmentBuildingDTO,
+				AssignmentBuildingEntity.class);
 		return assignmentBuildingEntity;
 	}
-	
+
 	public AssignmentBuildingDTO convertToAssignmentBuildingrDTO(AssignmentBuildingEntity assignmentBuildingEntity) {
-		AssignmentBuildingDTO assignmentBuildingDTO = modelMapper.map(assignmentBuildingEntity, AssignmentBuildingDTO.class);
+		AssignmentBuildingDTO assignmentBuildingDTO = modelMapper.map(assignmentBuildingEntity,
+				AssignmentBuildingDTO.class);
 		return assignmentBuildingDTO;
 	}
 }

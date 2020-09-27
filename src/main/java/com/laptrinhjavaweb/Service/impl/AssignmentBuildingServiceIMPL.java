@@ -32,7 +32,8 @@ public class AssignmentBuildingServiceIMPL implements AssignmentBuildingService 
 				unCheckedUsers.add(oldUserId);
 			}
 		}
-		flag = assignmentBuildingRepository.assignBuilding(isCheckedUsers,unCheckedUsers, assignmentBuildingDTO.getBuildingId());
+		flag = assignmentBuildingRepository.assignBuilding(isCheckedUsers, unCheckedUsers,
+				assignmentBuildingDTO.getBuildingId());
 		return flag;
 	}
 
@@ -46,7 +47,8 @@ public class AssignmentBuildingServiceIMPL implements AssignmentBuildingService 
 
 	@Override
 	public boolean updateStatus(AssignmentBuildingDTO assignmentBuildingDTO) {
-		AssignmentBuildingEntity assignmentBuildingEntity = assignmentBuildingConvertor.convertToAssignmentBuildingEntity(assignmentBuildingDTO);
+		AssignmentBuildingEntity assignmentBuildingEntity = assignmentBuildingConvertor
+				.convertToAssignmentBuildingEntity(assignmentBuildingDTO);
 		return assignmentBuildingRepository.updateStatus(assignmentBuildingEntity);
 	}
 

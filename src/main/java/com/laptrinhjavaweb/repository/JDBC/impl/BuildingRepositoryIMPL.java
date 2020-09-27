@@ -48,25 +48,21 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 			sql.append(" )");
 		}
 		// syntax JAVA 7
-		
-	/*	if (buildingSearchBuilder.getTypes() != null) {
-			int lengthType = buildingSearchBuilder.getTypes().length;
-			sql.append(" and (b.type like '%" + buildingSearchBuilder.getTypes()[0] + "%'");
-			for (int i = 1; i < lengthType; i++) {
-				if (i >= 1) {
-					sql.append(" or b.type like '%" + buildingSearchBuilder.getTypes()[i] + "%'");
-				}
-			}
-			sql.append(")");
-		} */
-		
+
+		/*
+		 * if (buildingSearchBuilder.getTypes() != null) { int lengthType =
+		 * buildingSearchBuilder.getTypes().length; sql.append(" and (b.type like '%" +
+		 * buildingSearchBuilder.getTypes()[0] + "%'"); for (int i = 1; i < lengthType;
+		 * i++) { if (i >= 1) { sql.append(" or b.type like '%" +
+		 * buildingSearchBuilder.getTypes()[i] + "%'"); } } sql.append(")"); }
+		 */
+
 		// syntax JAVA 8
-		
-		if (buildingSearchBuilder.getTypes() != null) {
+
+		if (buildingSearchBuilder.getTypes() != null && !buildingSearchBuilder.getTypes().equals("")) {
 			sql.append(" AND (");
-			String sqlType = Arrays.stream(buildingSearchBuilder.getTypes())
-									.map(item -> "b.type LIKE '%" +item+ "%'")
-									.collect(Collectors.joining(" OR "));
+			String sqlType = Arrays.stream(buildingSearchBuilder.getTypes()).map(item -> "b.type LIKE '%" + item + "%'")
+					.collect(Collectors.joining(" OR "));
 			sql.append(sqlType);
 			sql.append(")");
 		}
@@ -313,14 +309,15 @@ public class BuildingRepositoryIMPL extends SimpleJpaRepositoryIMPL<BuildingEnti
 
 	@Override
 	public List<BuildingEntity> findAllBuildingsByStaffId(long staffId) {
-		String sql = "SELECT * FROM building b JOIN assignmentbuilding a ON b.id = a.buildingid WHERE a.staffid = " + staffId;
+		String sql = "SELECT * FROM building b JOIN assignmentbuilding a ON b.id = a.buildingid WHERE a.staffid = "
+				+ staffId;
 		return findAll(sql);
 	}
 
 	@Override
 	public List<BuildingEntity> getBuildingsPrioritize(long staffId, String prioritize) {
 		String sql = "SELECT * FROM building b JOIN assignmentbuilding a ON b.id = a.buildingid WHERE a.staffid = "
-					+ staffId + " AND a.status = " + prioritize;  
+				+ staffId + " AND a.status = " + prioritize;
 		List<BuildingEntity> buildingEntities = findAll(sql);
 		return buildingEntities;
 	}

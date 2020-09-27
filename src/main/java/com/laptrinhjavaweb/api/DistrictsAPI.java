@@ -10,7 +10,7 @@ import com.laptrinhjavaweb.dto.output.DistrictOutput;
 @RestController
 public class DistrictsAPI {
 
-	@GetMapping ("/district")
+	@GetMapping("/district")
 	public List<DistrictOutput> getDistricts() {
 		return DistrictOutput.getList();
 	}

@@ -10,20 +10,20 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
 public class JpaAuditingConfig {
-	
-	@Bean
-    public AuditorAware<String> auditorProvider() {
-        return new AuditorAwareImpl();
-    }
 
-    public static class AuditorAwareImpl implements AuditorAware<String> {
-        @Override
-        public String getCurrentAuditor() {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication == null || !authentication.isAuthenticated()) {
-                return null;
-            }
-            return authentication.getName();
-        }
-    }
+	@Bean
+	public AuditorAware<String> auditorProvider() {
+		return new AuditorAwareImpl();
+	}
+
+	public static class AuditorAwareImpl implements AuditorAware<String> {
+		@Override
+		public String getCurrentAuditor() {
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if (authentication == null || !authentication.isAuthenticated()) {
+				return null;
+			}
+			return authentication.getName();
+		}
+	}
 }

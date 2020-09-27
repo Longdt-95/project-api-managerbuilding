@@ -11,7 +11,7 @@ import com.laptrinhjavaweb.repository.JDBC.RoleRepository;
 import com.laptrinhjavaweb.repository.JDBC.impl.RoleRepositoryIMPL;
 
 public class RoleServiceIMPL implements RoleService {
-	
+
 	private RoleRepository roleRepository = new RoleRepositoryIMPL();
 	private RoleConvertor roleConvertor = new RoleConvertor();
 
@@ -45,7 +45,5 @@ public class RoleServiceIMPL implements RoleService {
 	public int deleteRole(long id) {
 		return roleRepository.delete(id);
 	}
-
-
 
 }

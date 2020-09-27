@@ -6,7 +6,7 @@ import java.util.List;
 import com.laptrinhjavaweb.enums.DistrictEnum;
 
 public class DistrictOutput extends MasterData {
-	
+
 	public static List<DistrictOutput> getList() {
 		List<DistrictOutput> result = new ArrayList<>();
 		for (DistrictEnum enum1 : DistrictEnum.values()) {

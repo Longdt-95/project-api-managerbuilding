@@ -237,7 +237,7 @@ public class SimpleJpaRepositoryIMPL<T> implements SimpleJpaRepository<T> {
 		}
 		Field[] fields = zClass.getDeclaredFields();
 		StringBuilder columnAndValue = new StringBuilder("");
-		for (int i = 0; i < fields.length; i++ ) {
+		for (int i = 0; i < fields.length; i++) {
 			if (!fields[i].getName().equals("id") && fields[i].isAnnotationPresent(Column.class)) {
 				if (i > 1) {
 					columnAndValue.append(",");

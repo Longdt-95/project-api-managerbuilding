@@ -35,9 +35,6 @@ public class BuildingSearchBuilder {
 		return rentPriceTo;
 	}
 
-	
-
-
 	public String getManagerName() {
 		return managerName;
 	}
@@ -83,23 +80,23 @@ public class BuildingSearchBuilder {
 	}
 
 	private BuildingSearchBuilder(Builder builder) {
-			this.name=builder.name;
-			this.street=builder.street;
-			this.direction=builder.direction;
-			this.district=builder.district;
-			this.numberOfBasement=builder.numberOfBasement;
-			this.ward=builder.ward;
-			this.floorArea=builder.floorArea;
-			this.level=builder.level;
-			this.staffId=builder.staffId;
-			this.rentAreaFrom=builder.rentAreaFrom;
-			this.rentAreaTo=builder.rentAreaTo;
-			this.rentPriceFrom=builder.rentPriceFrom;
-			this.rentPriceTo=builder.rentPriceTo;
-			this.managerName=builder.managerName;
-			this.managerPhone=builder.managerPhone;
-			this.types=builder.types;
-		}
+		this.name = builder.name;
+		this.street = builder.street;
+		this.direction = builder.direction;
+		this.district = builder.district;
+		this.numberOfBasement = builder.numberOfBasement;
+		this.ward = builder.ward;
+		this.floorArea = builder.floorArea;
+		this.level = builder.level;
+		this.staffId = builder.staffId;
+		this.rentAreaFrom = builder.rentAreaFrom;
+		this.rentAreaTo = builder.rentAreaTo;
+		this.rentPriceFrom = builder.rentPriceFrom;
+		this.rentPriceTo = builder.rentPriceTo;
+		this.managerName = builder.managerName;
+		this.managerPhone = builder.managerPhone;
+		this.types = builder.types;
+	}
 
 	public String[] getTypes() {
 		return types;
@@ -124,7 +121,6 @@ public class BuildingSearchBuilder {
 		private String managerPhone;
 		private String staffId;
 		private String[] types = new String[] {};
-
 
 		public Builder setRentAreaFrom(Integer rentAreaFrom) {
 			this.rentAreaFrom = rentAreaFrom;
@@ -160,7 +156,6 @@ public class BuildingSearchBuilder {
 			this.staffId = staffId;
 			return this;
 		}
-
 
 		public Builder setName(String name) {
 			this.name = name;
@@ -201,16 +196,15 @@ public class BuildingSearchBuilder {
 			this.direction = direction;
 			return this;
 		}
-		
+
 		public Builder setTypes(String[] types) {
 			this.types = types;
 			return this;
 		}
-		
+
 		public BuildingSearchBuilder build() {
 			return new BuildingSearchBuilder(this);
 		}
-
 
 	}
 }

@@ -10,9 +10,10 @@ import com.laptrinhjavaweb.dto.AssignmentBuildingDTO;
 
 @RestController
 public class AssignmentBuildingAPI {
-	
+
 	private AssignmentBuildingService assignmentBuildingService = new AssignmentBuildingServiceIMPL();
-	@PostMapping("assign/edit") 
+
+	@PostMapping("assign/edit")
 	public boolean updateStatus(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
 		return assignmentBuildingService.updateStatus(assignmentBuildingDTO);
 	}

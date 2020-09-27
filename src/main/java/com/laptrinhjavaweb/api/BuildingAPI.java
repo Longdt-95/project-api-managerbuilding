@@ -33,24 +33,24 @@ public class BuildingAPI {
 	private UserService userService = new UserServiceIMPL();
 
 	@GetMapping("/buildings")
-	public List<BuildingDTO> getBuildingsSearch(@RequestParam Map<String, String> requestParams,
-			@RequestParam String[] type) {
+	public List<BuildingDTO> getBuildingsSearch(@RequestParam(required = false) Map<String, String> requestParams,
+			@RequestParam(required = false) String[] type) {
 		BuildingSearchBuilder buildingSearchBuilder = convertMapToBuilder(requestParams, type);
 		return buildingService.getBuildings(buildingSearchBuilder);
 	}
-	
+
 	@GetMapping("/buildings/assignment")
 	public List<BuildingDTO> getBuildingsByStaffId(@RequestParam long staffId) {
 		List<BuildingDTO> buildingDTOs = new ArrayList<>();
 		buildingDTOs = buildingService.getListBuildingByStaffId(staffId);
 		return buildingDTOs;
 	}
-	
+
 	@GetMapping("buildings/myList")
 	public List<BuildingDTO> getBuildingsPrioritize(@RequestParam long staffId, String prioritize) {
-		return buildingService.getBuildingsPrioritize(staffId,prioritize);
+		return buildingService.getBuildingsPrioritize(staffId, prioritize);
 	}
-	
+
 	@GetMapping("/building/detail")
 	public BuildingDTO getbuilding(@RequestParam long id) {
 		return buildingService.getBuilding(id);
@@ -60,7 +60,6 @@ public class BuildingAPI {
 	public BuildingDTO saveBuilding(@RequestBody BuildingDTO buildingDTO) {
 		return buildingService.saveBuilding(buildingDTO);
 	}
-
 
 	@GetMapping("/building/staff")
 	public List<UserDTO> getUsers(@RequestParam long buildingid, @RequestParam String role) {
@@ -72,18 +71,17 @@ public class BuildingAPI {
 	public boolean addManagerBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
 		return assignmentBuildingService.assignmentBuilding(assignmentBuildingDTO);
 	}
-	
+
 	@PutMapping("/building/edit")
 	public boolean updateBuilding(@RequestBody BuildingDTO buildingDTO) {
 		return buildingService.updateBuilding(buildingDTO);
 	}
 
 	@DeleteMapping("/building/delete")
-	public boolean delBuilding(@RequestParam long buildingId) {  
+	public boolean delBuilding(@RequestParam long buildingId) {
 		return buildingService.delBuilding(buildingId);
 	}
-	
-	
+
 	private BuildingSearchBuilder convertMapToBuilder(Map<String, String> requestParams, String[] type) {
 
 		Integer numberOfBasement = requestParams.containsKey("numberOfBasement")
@@ -127,16 +125,10 @@ public class BuildingAPI {
 				.setWard(requestParams.containsKey("ward") ? requestParams.get("ward") : null)
 				.setRentAreaFrom(rentAreaFrom).setRentAreaTo(rentAreaTo).setRentPriceFrom(rentPriceFrom)
 				.setRentPriceTo(rentPriceTo)
-				.setManagerName(requestParams.containsKey("managerName")
-						? requestParams.get("managerName")
-						: null)
-				.setManagerPhone(requestParams.containsKey("managerPhone")
-						? requestParams.get("managerPhone")
-						: null)
-				.setStaffId(requestParams.containsKey("staffId")
-						? requestParams.get("staffId")
-						: null)
-				.setTypes(type).build();
+				.setManagerName(requestParams.containsKey("managerName") ? requestParams.get("managerName") : null)
+				.setManagerPhone(requestParams.containsKey("managerPhone") ? requestParams.get("managerPhone") : null)
+				.setStaffId(requestParams.containsKey("staffId") ? requestParams.get("staffId") : null).setTypes(type)
+				.build();
 		return builder;
 	}
 }

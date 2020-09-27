@@ -5,28 +5,28 @@ import java.util.Date;
 import com.laptrinhjavaweb.annotation.Column;
 import com.laptrinhjavaweb.annotation.Table;
 
-@Table (name = "rentarea")
+@Table(name = "rentarea")
 public class RentAreaEntity {
-	
-	@Column (name = "id")
+
+	@Column(name = "id")
 	private long id;
-	
-	@Column (name = "value")
+
+	@Column(name = "value")
 	private Integer value;
-	
-	@Column (name = "buildingid")
+
+	@Column(name = "buildingid")
 	private long buildingId;
-	
-	@Column (name = "createdby")
+
+	@Column(name = "createdby")
 	private String createdBy;
-	
-	@Column (name = "createddate")
+
+	@Column(name = "createddate")
 	private Date createdDate;
-	
-	@Column (name = "modifiedby")
+
+	@Column(name = "modifiedby")
 	private String modifiedBy;
-	
-	@Column (name = "modifieddate")
+
+	@Column(name = "modifieddate")
 	private Date modifiedDate;
 
 	public long getId() {
@@ -84,6 +84,5 @@ public class RentAreaEntity {
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
-	
-	
+
 }

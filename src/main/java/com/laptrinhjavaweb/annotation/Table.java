@@ -8,6 +8,6 @@ import java.lang.annotation.ElementType;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Table {
+
 	String name() default "";
-	
 }

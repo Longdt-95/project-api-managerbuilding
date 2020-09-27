@@ -9,8 +9,8 @@ import com.laptrinhjavaweb.dto.output.TransactionTypeOutput;
 
 @RestController
 public class TransactionTypeAPI {
-	
-	@GetMapping ("/TransactionType")
+
+	@GetMapping("/TransactionType")
 	public List<TransactionTypeOutput> getTransactionTypes() {
 		return TransactionTypeOutput.getList();
 	}

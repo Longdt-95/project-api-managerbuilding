@@ -9,18 +9,19 @@ import java.util.List;
 import com.laptrinhjavaweb.enity.UserEntity;
 import com.laptrinhjavaweb.repository.JDBC.UserRepository;
 
-public class UserRepositoryIMPL extends SimpleJpaRepositoryIMPL<UserEntity> implements UserRepository{
-
+public class UserRepositoryIMPL extends SimpleJpaRepositoryIMPL<UserEntity> implements UserRepository {
 
 	@Override
 	public List<UserEntity> getUsersAssignmentBuildingByBuildingID(long id) {
-		String sql = "SELECT * FROM user u JOIN assignmentbuilding a on u.id = a.staffid JOIN user_role ur on u.id = ur.userid WHERE buildingid = "+ id +" and ur.roleid = 2 ";
+		String sql = "SELECT * FROM user u JOIN assignmentbuilding a on u.id = a.staffid JOIN user_role ur on u.id = ur.userid WHERE buildingid = "
+				+ id + " and ur.roleid = 2 ";
 		return this.findAll(sql);
 	}
 
 	@Override
 	public List<UserEntity> findAllStaff(String role) {
-		String sql = "SELECT * FROM user u JOIN user_role ur on u.id = ur.userid JOIN role r on ur.roleid = r.id WHERE r.code = '" + role + "'";
+		String sql = "SELECT * FROM user u JOIN user_role ur on u.id = ur.userid JOIN role r on ur.roleid = r.id WHERE r.code = '"
+				+ role + "'";
 		return this.findAll(sql);
 	}
 
@@ -41,8 +42,8 @@ public class UserRepositoryIMPL extends SimpleJpaRepositoryIMPL<UserEntity> impl
 				flag = true;
 			}
 			return flag;
-		} catch (SQLException  e) {
-				e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 			System.out.println(e.getMessage());
 			return flag;
 		} finally {

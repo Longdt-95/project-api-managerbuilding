@@ -5,7 +5,7 @@ import java.util.List;
 import com.laptrinhjavaweb.enity.RentAreaEntity;
 import com.laptrinhjavaweb.repository.JDBC.RentAreaRepository;
 
-public class RentAreaRepositoryIMPL extends SimpleJpaRepositoryIMPL<RentAreaEntity> implements RentAreaRepository{
+public class RentAreaRepositoryIMPL extends SimpleJpaRepositoryIMPL<RentAreaEntity> implements RentAreaRepository {
 
 	@Override
 	public List<RentAreaEntity> getRentArea(long id) {

@@ -10,7 +10,7 @@ import com.laptrinhjavaweb.dto.output.BuildingTypeOutput;
 @RestController
 public class BuildingTypeAPI {
 
-	@GetMapping ("/building-type")
+	@GetMapping("/building-type")
 	public List<BuildingTypeOutput> getBuildingType() {
 		return BuildingTypeOutput.getList();
 	}

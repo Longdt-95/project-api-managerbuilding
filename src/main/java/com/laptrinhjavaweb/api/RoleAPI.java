@@ -14,26 +14,26 @@ import com.laptrinhjavaweb.dto.RoleDTO;
 
 @RestController
 public class RoleAPI {
-	
+
 	private RoleService roleservice = new RoleServiceIMPL();
-	
-	@PostMapping("/role") 
+
+	@PostMapping("/role")
 	public RoleDTO getRole(@RequestBody RoleDTO roleDTO) {
 		RoleDTO roleDTO1 = roleservice.saveRole(roleDTO);
 		return roleDTO1;
 	}
-	
+
 	@GetMapping("/listRoles")
 	public List<RoleDTO> findAll() {
 		List<RoleDTO> listResult = new ArrayList<>();
 		listResult = roleservice.findAll();
 		return listResult;
 	}
-	
+
 	@PostMapping("/new-role")
 	public int deleteRole(@RequestBody RoleDTO roleDTO) {
 		int row = roleservice.deleteRole(roleDTO.getId());
 		return row;
 	}
-	
+
 }

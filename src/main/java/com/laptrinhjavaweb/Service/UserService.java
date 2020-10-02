@@ -6,5 +6,7 @@ import com.laptrinhjavaweb.dto.UserDTO;
 
 public interface UserService{
 	
-	List<UserDTO> findAllStaff(long id, String role);
+	List<UserDTO> findAllStaffAssignBuilding(long id, String role);
+
+	List<UserDTO> findAllStaffAssignCustomer(long customerId, String role);
 }

@@ -46,13 +46,13 @@ public class BuildingAPI {
 		return buildingDTOs;
 	}
 
-	@GetMapping("buildings/myList")
+	@GetMapping("buildings/mylist")
 	public List<BuildingDTO> getBuildingsPrioritize(@RequestParam long staffId, String prioritize) {
 		return buildingService.getBuildingsPrioritize(staffId, prioritize);
 	}
 
 	@GetMapping("/building/detail")
-	public BuildingDTO getbuilding(@RequestParam long id) {
+	public BuildingDTO getDetailBuilding(@RequestParam long id) {
 		return buildingService.getBuilding(id);
 	}
 
@@ -62,8 +62,8 @@ public class BuildingAPI {
 	}
 
 	@GetMapping("/building/staff")
-	public List<UserDTO> getUsers(@RequestParam long buildingid, @RequestParam String role) {
-		List<UserDTO> listResult = userService.findAllStaff(buildingid, role);
+	public List<UserDTO> getStaffs(@RequestParam long buildingid, @RequestParam String role) {
+		List<UserDTO> listResult = userService.findAllStaffAssignBuilding(buildingid, role);
 		return listResult;
 	}
 
@@ -114,7 +114,7 @@ public class BuildingAPI {
 						? Integer.parseInt(requestParams.get("rentPriceTo"))
 						: null)
 				: null;
-		BuildingSearchBuilder builder = new BuildingSearchBuilder.Builder()
+		BuildingSearchBuilder builder = new BuildingSearchBuilder.BuilderBuilding()
 				.setName(requestParams.containsKey("name") ? requestParams.get("name") : null)
 				.setNumberOfBasement(numberOfBasement)
 				.setDirection(requestParams.containsKey("direction") ? requestParams.get("direction") : null)

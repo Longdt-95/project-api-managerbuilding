@@ -28,6 +28,16 @@ public class UserRepositoryIMPL extends SimpleJpaRepositoryIMPL<UserEntity> impl
 	@Override
 	public boolean isAssignmentBuilding(long staffId, long buildingId) {
 		String sql = "SELECT * FROM assignmentbuilding WHERE staffid = ? and buildingid = ?";
+		return isAssignment(staffId,buildingId, sql);
+	}
+	
+	@Override
+	public boolean isAssignmentCustomer(long staffId, long customerId) {
+		String sql = "SELECT * FROM assignmentcustomer WHERE staffid = ? and customerid = ?";
+		return isAssignment(staffId,customerId, sql);
+	}
+
+	private boolean isAssignment(long staffId, long buildingId, String sql) {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
@@ -61,6 +71,9 @@ public class UserRepositoryIMPL extends SimpleJpaRepositoryIMPL<UserEntity> impl
 				System.out.println(e.getMessage());
 			}
 		}
+		
 	}
+
+	
 
 }

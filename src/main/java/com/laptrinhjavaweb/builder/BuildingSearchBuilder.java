@@ -79,7 +79,7 @@ public class BuildingSearchBuilder {
 		return direction;
 	}
 
-	private BuildingSearchBuilder(Builder builder) {
+	private BuildingSearchBuilder(BuilderBuilding builder) {
 		this.name = builder.name;
 		this.street = builder.street;
 		this.direction = builder.direction;
@@ -103,7 +103,7 @@ public class BuildingSearchBuilder {
 	}
 
 	// Builder Class
-	public static class Builder {
+	public static class BuilderBuilding {
 
 		private String name;
 		private String street;
@@ -122,82 +122,82 @@ public class BuildingSearchBuilder {
 		private String staffId;
 		private String[] types = new String[] {};
 
-		public Builder setRentAreaFrom(Integer rentAreaFrom) {
+		public BuilderBuilding setRentAreaFrom(Integer rentAreaFrom) {
 			this.rentAreaFrom = rentAreaFrom;
 			return this;
 		}
 
-		public Builder setRentAreaTo(Integer rentAreaTo) {
+		public BuilderBuilding setRentAreaTo(Integer rentAreaTo) {
 			this.rentAreaTo = rentAreaTo;
 			return this;
 		}
 
-		public Builder setRentPriceFrom(Integer rentPriceFrom) {
+		public BuilderBuilding setRentPriceFrom(Integer rentPriceFrom) {
 			this.rentPriceFrom = rentPriceFrom;
 			return this;
 		}
 
-		public Builder setRentPriceTo(Integer rentPriceTo) {
+		public BuilderBuilding setRentPriceTo(Integer rentPriceTo) {
 			this.rentPriceTo = rentPriceTo;
 			return this;
 		}
 
-		public Builder setManagerName(String managerName) {
+		public BuilderBuilding setManagerName(String managerName) {
 			this.managerName = managerName;
 			return this;
 		}
 
-		public Builder setManagerPhone(String managerPhone) {
+		public BuilderBuilding setManagerPhone(String managerPhone) {
 			this.managerPhone = managerPhone;
 			return this;
 		}
 
-		public Builder setStaffId(String staffId) {
+		public BuilderBuilding setStaffId(String staffId) {
 			this.staffId = staffId;
 			return this;
 		}
 
-		public Builder setName(String name) {
+		public BuilderBuilding setName(String name) {
 			this.name = name;
 			return this;
 		}
 
-		public Builder setStreet(String street) {
+		public BuilderBuilding setStreet(String street) {
 			this.street = street;
 			return this;
 		}
 
-		public Builder setWard(String ward) {
+		public BuilderBuilding setWard(String ward) {
 			this.ward = ward;
 			return this;
 		}
 
-		public Builder setDistrict(String district) {
+		public BuilderBuilding setDistrict(String district) {
 			this.district = district;
 			return this;
 		}
 
-		public Builder setLevel(String level) {
+		public BuilderBuilding setLevel(String level) {
 			this.level = level;
 			return this;
 		}
 
-		public Builder setNumberOfBasement(Integer numberOfBasement) {
+		public BuilderBuilding setNumberOfBasement(Integer numberOfBasement) {
 			this.numberOfBasement = numberOfBasement;
 			return this;
 		}
 
-		public Builder setFloorArea(Integer floorarea) {
+		public BuilderBuilding setFloorArea(Integer floorarea) {
 			this.floorArea = floorarea;
 			return this;
 		}
 
-		public Builder setDirection(String direction) {
+		public BuilderBuilding setDirection(String direction) {
 			this.direction = direction;
 			return this;
 		}
 
-		public Builder setTypes(String[] types) {
+		public BuilderBuilding setTypes(String[] types) {
 			this.types = types;
 			return this;
 		}
@@ -205,6 +205,5 @@ public class BuildingSearchBuilder {
 		public BuildingSearchBuilder build() {
 			return new BuildingSearchBuilder(this);
 		}
-
 	}
 }

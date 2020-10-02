@@ -3,7 +3,7 @@ package com.laptrinhjavaweb.Service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.laptrinhjavaweb.Convertor.GenericConvertor;
+import com.laptrinhjavaweb.Convertor.UserConvertor;
 import com.laptrinhjavaweb.Service.UserService;
 import com.laptrinhjavaweb.dto.UserDTO;
 import com.laptrinhjavaweb.enity.UserEntity;
@@ -13,10 +13,10 @@ import com.laptrinhjavaweb.repository.JDBC.impl.UserRepositoryIMPL;
 public class UserServiceIMPL implements UserService {
 
 	private UserRepository useRepository = new UserRepositoryIMPL();
-	private GenericConvertor<UserDTO, UserEntity> convertor = new GenericConvertor<>();
+	private UserConvertor convertor = new UserConvertor();
 
 	@Override
-	public List<UserDTO> findAllStaff(long buildingId, String role) {
+	public List<UserDTO> findAllStaffAssignBuilding(long buildingId, String role) {
 
 		// syntax JAVA 7
 		/*
@@ -31,8 +31,21 @@ public class UserServiceIMPL implements UserService {
 
 		List<UserEntity> staffs = useRepository.findAllStaff(role);
 		List<UserDTO> result = staffs.stream().map(item -> {
-			UserDTO dto = convertor.convertorToDTO(item);
+			UserDTO dto = convertor.convertToUserDTO(item);
 			if (useRepository.isAssignmentBuilding(dto.getId(), buildingId) == true) {
+				dto.setChecked("checked");
+			}
+			return dto;
+		}).collect(Collectors.toList());
+		return result;
+	}
+
+	@Override
+	public List<UserDTO> findAllStaffAssignCustomer(long customerId, String role) {
+		List<UserEntity> staffs = useRepository.findAllStaff(role);
+		List<UserDTO> result = staffs.stream().map(item -> {
+			UserDTO dto = convertor.convertToUserDTO(item);
+			if (useRepository.isAssignmentCustomer(dto.getId(), customerId) == true) {
 				dto.setChecked("checked");
 			}
 			return dto;

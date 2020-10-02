@@ -62,9 +62,10 @@ public class CustomerAPI {
 	}
 	
 	@PostMapping("customer/transaction")
-	public TransactionDTO saveTransaction(@RequestBody TransactionDTO dto) {
+	public CustomerDTO saveTransaction(@RequestBody TransactionDTO dto) {
 		return transactionService.saveTransaction(dto);
 	}
+	
 	
 	@GetMapping("customer/detail")
 	public CustomerDTO getCustomerDetail(@RequestParam long customerId) {

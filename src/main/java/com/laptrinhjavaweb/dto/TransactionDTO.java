@@ -5,6 +5,15 @@ public class TransactionDTO {
 	private long staffId;
 	private String code;
 	private String note;
+	private long customerId;
+
+	public long getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(long customerId) {
+		this.customerId = customerId;
+	}
 
 	public long getStaffId() {
 		return staffId;

@@ -61,7 +61,7 @@ public class CustomerAPI {
 		return listResult;
 	}
 	
-	@PostMapping("customer/transaction")
+	@PostMapping("customer/transaction-edit")
 	public CustomerDTO saveTransaction(@RequestBody TransactionDTO dto) {
 		return transactionService.saveTransaction(dto);
 	}

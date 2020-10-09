@@ -17,6 +17,7 @@ import com.laptrinhjavaweb.dto.CustomerDTO;
 import com.laptrinhjavaweb.dto.TransactionDTO;
 import com.laptrinhjavaweb.enity.CustomerEntity;
 import com.laptrinhjavaweb.enity.TransactionEntity;
+import com.laptrinhjavaweb.enums.TransactionTypeEnum;
 import com.laptrinhjavaweb.repository.JDBC.AssignmentCustomerRepository;
 import com.laptrinhjavaweb.repository.JDBC.CustomerRepository;
 import com.laptrinhjavaweb.repository.JDBC.TransactionRepository;
@@ -97,6 +98,13 @@ public class CustomerServiceIMPL implements CustomerService {
 		List<TransactionDTO> result = transactionEntities.stream()
 				.map(item -> transactionConvertor.convertToTransactionDTO(item)).collect(Collectors.toList());
 		customerDTO.setListResult(result);
+		for (TransactionDTO transactionDTO: customerDTO.getListResult()) {
+			if (transactionDTO.getCode().equals(TransactionTypeEnum.TYPE_1.name())) {
+				transactionDTO.setCode(TransactionTypeEnum.TYPE_1.getValue());
+			}else if (transactionDTO.getCode().equals(TransactionTypeEnum.TYPE_2.name())) {
+				transactionDTO.setCode(TransactionTypeEnum.TYPE_2.getValue());
+			}
+		}
 		return customerDTO;
 	}
 

@@ -2,7 +2,6 @@ package com.laptrinhjavaweb.dto;
 
 public class TransactionDTO {
 
-	private long staffId;
 	private String code;
 	private String note;
 	private long customerId;
@@ -13,14 +12,6 @@ public class TransactionDTO {
 
 	public void setCustomerId(long customerId) {
 		this.customerId = customerId;
-	}
-
-	public long getStaffId() {
-		return staffId;
-	}
-
-	public void setStaffId(long staffId) {
-		this.staffId = staffId;
 	}
 
 	public String getCode() {

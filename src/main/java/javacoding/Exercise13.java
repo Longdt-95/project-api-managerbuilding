@@ -1,7 +1,5 @@
 package javacoding;
 
-import java.util.Arrays;
-
 public class Exercise13 {
 
 	public static int secondMax (int[] arr) {
